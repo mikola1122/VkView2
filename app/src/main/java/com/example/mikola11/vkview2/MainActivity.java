@@ -15,7 +15,7 @@ public class MainActivity extends FragmentActivity {
 
         Fragment frag1 = new Fragment1();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.fragment1, frag1);
+        ft.add(R.id.fragment, frag1);
         ft.commit();
     }
 }
