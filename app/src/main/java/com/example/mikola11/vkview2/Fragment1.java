@@ -18,7 +18,6 @@ public class Fragment1 extends Fragment {
 
     private WebView myWebView;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,19 +27,20 @@ public class Fragment1 extends Fragment {
         myWebView.getSettings().setJavaScriptEnabled(true);
         myWebView.getSettings().setSaveFormData(true);
         myWebView.clearCache(true);
-        myWebView.loadUrl("https://oauth.vk.com/authorize?client_id=4980642&scope=friends,photos&redirect_uri=https://oauth.vk.com/blank.html&scope=12&display=mobile&v=5.34&response_type=token");
+        myWebView.loadUrl("https://oauth.vk.com/authorize?client_id=4980642&scope=friends," +
+                "photos&redirect_uri=https://oauth.vk.com/blank.html&scope=12&" +
+                "display=mobile&v=5.34&response_type=token");
 
+        // TODO use another method not onPageFinished
         myWebView.setWebViewClient(new WebViewClient() {
-
             public void onPageFinished(WebView view, String url) {
                 GettingAccessToken(url);
             }
         });
         return v;
 
-
     }
-
+    // TODO move hardcoded strings to constants
     public void GettingAccessToken(String url) {
         if (url.contains("REDIRECT_URI")) {
             String[] separatedToken = url.split("[=&]+");
@@ -52,13 +52,12 @@ public class Fragment1 extends Fragment {
                 } else if (separatedToken[i].contains("user_id")) {
                     SaveUserId(separatedToken[i + 1]);
                 }
-
             }
-
         }
         return;
     }
 
+    // TODO move hardcoded strings to constants
     public SharedPreferences SaveAccessToken(String accessToken) {
         SharedPreferences saveAccessTokenPref;
         saveAccessTokenPref = getActivity().getSharedPreferences("AccessTokenPreferences", Context.MODE_PRIVATE);
