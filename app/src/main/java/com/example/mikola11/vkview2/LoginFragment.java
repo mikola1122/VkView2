@@ -17,7 +17,7 @@ import android.webkit.WebViewClient;
 public class LoginFragment extends Fragment {
 
     private WebView myWebView;
-    public static final String CHECK_REDIRECT_URI = "REDIRECT_URI";
+    //    public static final String CHECK_REDIRECT_URI = "REDIRECT_URI";
     public static final String CHECK_TOKEN = "access_token";
     public static final String CHECK_TIME = "expires_in";
     public static final String CHECK_ID = "user_id";
@@ -28,11 +28,8 @@ public class LoginFragment extends Fragment {
 
     public static final String LOG = "NIKI";
 
-//    public static final String REDIRECT_URI = "https://oauth.vk.com/blank.html";
+    public static final String REDIRECT_URI = "access_token=";
 
-    public static String accessToken;
-    public static String expiresIn;
-    public static String userId;
 
     @Nullable
     @Override
@@ -52,37 +49,34 @@ public class LoginFragment extends Fragment {
 
                 Log.d(LOG, "URL = " + url);
 
-                if (!url.startsWith(CHECK_REDIRECT_URI)) {
+                if (url.contains(REDIRECT_URI)) {
 
-                    return false;
-
-                } else {
 
                     Uri tokenUri = Uri.parse(url);
-                    accessToken = tokenUri.getQueryParameter(CHECK_TOKEN);
-                    expiresIn = tokenUri.getQueryParameter(CHECK_TIME);
-                    userId = tokenUri.getQueryParameter(CHECK_ID);
+                    String accessToken = tokenUri.getQueryParameter(CHECK_TOKEN);
+                    String expiresIn = tokenUri.getQueryParameter(CHECK_TIME);
+                    String userId = tokenUri.getQueryParameter(CHECK_ID);
 
 
                     SharedPreferences saveLoginDataPref;
                     saveLoginDataPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editorAccessToken = saveLoginDataPref.edit();
-                    SharedPreferences.Editor editorExpiresIn = saveLoginDataPref.edit();
-                    SharedPreferences.Editor editorUserId = saveLoginDataPref.edit();
-                    editorAccessToken.putString(NAME_PREF_TOKEN, accessToken);
-                    editorExpiresIn.putString(NAME_PREF_TIME, expiresIn);
-                    editorUserId.putString(NAME_PREF_ID, userId);
-                    editorAccessToken.commit();
-                    editorExpiresIn.commit();
-                    editorUserId.commit();
+                    SharedPreferences.Editor editor = saveLoginDataPref.edit();
+                    editor.putString(NAME_PREF_TOKEN, accessToken);
+                    editor.putString(NAME_PREF_TIME, expiresIn);
+                    editor.putString(NAME_PREF_ID, userId);
+                    editor.apply();
 
-                    Log.d(LOG, "token = " + accessToken);
+//                    saveLoginDataPref.edit().clear().apply();
+
+
+                    Log.d(LOG, "token = " + getActivity().getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_TOKEN, NAME_PREF_TOKEN));
                     Log.d(LOG, "time = " + expiresIn);
                     Log.d(LOG, "ID = " + userId);
 
-                    view.loadUrl(url);
+//                    view.loadUrl(url);
                     return true;
                 }
+                return false;
             }
         });
 

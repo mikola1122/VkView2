@@ -14,6 +14,10 @@ public class MainActivity extends FragmentActivity {
     public static final String NAME_PREF_ID = "UserId";
     public static final String LOG = "NIKI";
 
+    public static final String DEFAULT_PREF_TOKEN = "accessToken";
+    public static final String DEFAULT_PREF_ID = "userId";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +27,16 @@ public class MainActivity extends FragmentActivity {
         Fragment frag;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
+        String storedToken =(String) this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_TOKEN, DEFAULT_PREF_TOKEN);
+        String storedUserId =(String) this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_ID, DEFAULT_PREF_ID);
 
-        if (this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_TOKEN, "accessToken").equals(LoginFragment.accessToken) && this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_ID, "userId").equals(LoginFragment.userId)) {
+        if (storedToken.equals(DEFAULT_PREF_TOKEN) && storedUserId.equals(DEFAULT_PREF_ID)) {
 
             frag = new LoginFragment();
             ft.add(R.id.fragment, frag);
+
+//            Log.d(LOG, this.getLocalClassName() + " access_token = " + LoginFragment.accessToken);
+//            Log.d(LOG, this.getLocalClassName() + " user_id = " + LoginFragment.userId);
 
 
         } else {
@@ -36,12 +45,15 @@ public class MainActivity extends FragmentActivity {
             ft.add(R.id.fragment, frag);
 
 
-            Log.d(LOG, this.getLocalClassName() + " access_token = " + LoginFragment.accessToken);
-            Log.d(LOG, this.getLocalClassName() + " user_id = " + LoginFragment.userId);
+//            Log.d(LOG, this.getLocalClassName() + " access_token = " + LoginFragment.accessToken);
+//            Log.d(LOG, this.getLocalClassName() + " user_id = " + LoginFragment.userId);
 
         }
 
         ft.commit();
+
+        Log.d(LOG, this.getLocalClassName() + " access_token = " + storedToken);
+        Log.d(LOG, this.getLocalClassName() + " user_id = " + storedUserId);
 
 
     }
