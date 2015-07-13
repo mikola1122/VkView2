@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import de.greenrobot.event.EventBus;
+
 
 public class LoginFragment extends Fragment {
 
@@ -52,7 +54,6 @@ public class LoginFragment extends Fragment {
 
                     url = url.replace("#", "?");
 
-
                     Uri tokenUri = Uri.parse(url);
                     String accessToken = tokenUri.getQueryParameter(CHECK_TOKEN);
                     String expiresIn = tokenUri.getQueryParameter(CHECK_TIME);
@@ -66,9 +67,11 @@ public class LoginFragment extends Fragment {
                     editor.putString(NAME_PREF_ID, userId);
                     editor.apply();
 
-                    Log.d(LOG, "token = " + getActivity().getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_TOKEN, NAME_PREF_TOKEN));
+                    Log.d(LOG, "token = " + accessToken);
                     Log.d(LOG, "time = " + expiresIn);
                     Log.d(LOG, "ID = " + userId);
+
+                    EventBus.getDefault().post(new GoToFriendsListEvent());
 
                     return true;
                 }
