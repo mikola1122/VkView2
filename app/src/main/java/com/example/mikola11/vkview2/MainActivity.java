@@ -27,26 +27,18 @@ public class MainActivity extends FragmentActivity {
         Fragment frag;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-        String storedToken =(String) this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_TOKEN, DEFAULT_PREF_TOKEN);
-        String storedUserId =(String) this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_ID, DEFAULT_PREF_ID);
+        String storedToken = this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_TOKEN, DEFAULT_PREF_TOKEN);
+        String storedUserId = this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_ID, DEFAULT_PREF_ID);
 
         if (storedToken.equals(DEFAULT_PREF_TOKEN) && storedUserId.equals(DEFAULT_PREF_ID)) {
 
             frag = new LoginFragment();
             ft.add(R.id.fragment, frag);
 
-//            Log.d(LOG, this.getLocalClassName() + " access_token = " + LoginFragment.accessToken);
-//            Log.d(LOG, this.getLocalClassName() + " user_id = " + LoginFragment.userId);
-
-
         } else {
 
             frag = new FriendsListFragment();
             ft.add(R.id.fragment, frag);
-
-
-//            Log.d(LOG, this.getLocalClassName() + " access_token = " + LoginFragment.accessToken);
-//            Log.d(LOG, this.getLocalClassName() + " user_id = " + LoginFragment.userId);
 
         }
 

@@ -17,7 +17,6 @@ import android.webkit.WebViewClient;
 public class LoginFragment extends Fragment {
 
     private WebView myWebView;
-    //    public static final String CHECK_REDIRECT_URI = "REDIRECT_URI";
     public static final String CHECK_TOKEN = "access_token";
     public static final String CHECK_TIME = "expires_in";
     public static final String CHECK_ID = "user_id";
@@ -51,12 +50,13 @@ public class LoginFragment extends Fragment {
 
                 if (url.contains(REDIRECT_URI)) {
 
+                    url = url.replace("#", "?");
+
 
                     Uri tokenUri = Uri.parse(url);
                     String accessToken = tokenUri.getQueryParameter(CHECK_TOKEN);
                     String expiresIn = tokenUri.getQueryParameter(CHECK_TIME);
                     String userId = tokenUri.getQueryParameter(CHECK_ID);
-
 
                     SharedPreferences saveLoginDataPref;
                     saveLoginDataPref = getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -66,14 +66,10 @@ public class LoginFragment extends Fragment {
                     editor.putString(NAME_PREF_ID, userId);
                     editor.apply();
 
-//                    saveLoginDataPref.edit().clear().apply();
-
-
                     Log.d(LOG, "token = " + getActivity().getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_TOKEN, NAME_PREF_TOKEN));
                     Log.d(LOG, "time = " + expiresIn);
                     Log.d(LOG, "ID = " + userId);
 
-//                    view.loadUrl(url);
                     return true;
                 }
                 return false;
