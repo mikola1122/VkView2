@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">VkView2</string>
     <string name="url_start">https://oauth.vk.com/authorize?client_id=4980642&amp;scope=friends," +
-                "photos&amp;redirect_uri=https://oauth.vk.com/blank.html&amp;" +
+                "photos,offline&amp;redirect_uri=https://oauth.vk.com/blank.html&amp;" +
                 "display=mobile&amp;v=5.34&amp;response_type=token</string>
 </resources>
