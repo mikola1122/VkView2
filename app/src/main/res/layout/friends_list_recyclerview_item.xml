@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/image_horizontal_margin"
+    android:paddingTop="@dimen/image_horizontal_margin"
     android:orientation="horizontal">
 
     <ImageView
