@@ -10,6 +10,7 @@ import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
 import com.example.mikola11.vkview2.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.ui.login.LoginFragment;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.ui.login.TokenStorage;
 
 import de.greenrobot.event.EventBus;
 
@@ -20,14 +21,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String NAME_PREF_ID = "UserId";
     public static final String LOG = "NIKI";
 
-    public static final String DEFAULT_PREF_TOKEN = "accessToken";
+    public static final String DEFAULT_PREF_TOKEN = "noToken";
     public static final String DEFAULT_PREF_ID = "userId";
 
     @Override
     protected void onStart() {
         EventBus.getDefault().register(this);
         super.onStart();
-
 
     }
 
@@ -36,19 +36,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
-        String storedToken = this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_TOKEN, DEFAULT_PREF_TOKEN);
-        String storedUserId = this.getPreferences(Context.MODE_PRIVATE).getString(NAME_PREF_ID, DEFAULT_PREF_ID);
+        String storedToken = TokenStorage.getAccesTokenPref(getApplicationContext());
 
 
-        if (storedToken.equals(DEFAULT_PREF_TOKEN) && storedUserId.equals(DEFAULT_PREF_ID)) {
+        if (storedToken.equals(DEFAULT_PREF_TOKEN)) {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment, new LoginFragment()).commit();
         } else {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment, new FriendsListFragment()).commit();
         }
 
-
         Log.d(LOG, this.getLocalClassName() + " access_token = " + storedToken);
-        Log.d(LOG, this.getLocalClassName() + " user_id = " + storedUserId);
 
     }
 

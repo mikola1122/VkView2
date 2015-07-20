@@ -60,19 +60,13 @@ public class LoginFragment extends Fragment {
 
                     Uri tokenUri = Uri.parse(url);
                     String accessToken = tokenUri.getQueryParameter(CHECK_TOKEN);
-                    String expiresIn = tokenUri.getQueryParameter(CHECK_TIME);
                     String userId = tokenUri.getQueryParameter(CHECK_ID);
+                    int userIdInt=Integer.valueOf(userId);
 
-                    SharedPreferences saveLoginDataPref;
-                    saveLoginDataPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = saveLoginDataPref.edit();
-                    editor.putString(NAME_PREF_TOKEN, accessToken);
-                    editor.putString(NAME_PREF_TIME, expiresIn);
-                    editor.putString(NAME_PREF_ID, userId);
-                    editor.apply();
+                    TokenStorage.setAccesTokenPref(getActivity(),accessToken);
+                    TokenStorage.setUserIdPref(getActivity(),userIdInt);
 
                     Log.d(LOG, "token = " + accessToken);
-                    Log.d(LOG, "time = " + expiresIn);
                     Log.d(LOG, "ID = " + userId);
 
                     EventBus.getDefault().post(new GoToFriendsListEvent());

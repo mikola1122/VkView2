@@ -8,10 +8,10 @@ public String  accessToken;
     public FriendsDataAdapter() {
 
 
-//        accessToken = ReturningToken.getAccesTokenPref();
+//        accessToken = TokenStorage.getAccesTokenPref();
 //
-//        service.getFriendsData(accessToken, new Callback<Response>() {
-//            public void success(Response arg0, retrofit.client.Response arg1) {
+//        service.getFriendsData(accessToken, new Callback<Response1>() {
+//            public void success(Response1 arg0, retrofit.client.Response1 arg1) {
 //            }
 //
 //            public void failure(RetrofitError arg0) {

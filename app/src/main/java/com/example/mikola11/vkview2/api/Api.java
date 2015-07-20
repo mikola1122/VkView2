@@ -1,15 +1,15 @@
 package com.example.mikola11.vkview2.api;
 
 
-import com.example.mikola11.vkview2.ui.friends.Friend;
+import com.example.mikola11.vkview2.ui.friends.FResponse;
 
-import java.util.List;
+import java.util.Map;
 
 import retrofit.http.GET;
-import retrofit.http.Path;
+import retrofit.http.QueryMap;
 
 public interface Api {
 
-    @GET("/method/friends.get?order=random&fields=photo_100&v=5.34&access_token={accesToken}")
-    List<Friend> getFriendsData(@Path("accessToken") String token);
+    @GET("/method/friends.get")
+    FResponse getFriendsData(@QueryMap Map<String, String> parameters);
 }

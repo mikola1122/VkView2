@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
 
 import java.util.List;
@@ -34,8 +35,11 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.friendName.setText(friendList.get(position).getFullName());
-        holder.friendIcon.setImageResource(R.drawable.vk_image_loaded);
-//        Glide.with(mContext).load("https://pp.vk.me/c622925/v622925139/248de/qAJFX7jr56A.jpg").into(holder.friendIcon);
+//        holder.friendIcon.setImageResource(R.drawable.vk_image_loaded);
+        Glide.with(mContext).load(friendList.get(position).getPhoto_100())
+                .override(70,70)
+                .centerCrop()
+                .into(holder.friendIcon);
     }
 
     @Override

@@ -28,6 +28,7 @@ public class FriendsListFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         EventBus.getDefault().post(new RequestFriendsDataEvent());
         super.onCreate(savedInstanceState);
     }
@@ -46,9 +47,6 @@ public class FriendsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.friends_list_fragment, null);
 
-
-//        populateFriends(friendList);
-
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.friendsListRecyclerView);
         friendsListAdapter = new FriendsListAdapter(getActivity(), friendList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -57,21 +55,14 @@ public class FriendsListFragment extends Fragment {
         recyclerView.setAdapter(friendsListAdapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
-
         return v;
 
     }
 
-
-
-
-//    private void populateFriends(List<Friend> friendList) {
-//        for (int i = 0; i < 55; i++) {
-//            Friend friend = new Friend();
-//            friend.setFirst_name("Friend");
-//            friend.setLast_name(Integer.toString(i));
-//            friendList.add(friend);
-//        }
-//    }
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
 
 }
