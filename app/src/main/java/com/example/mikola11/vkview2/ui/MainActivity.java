@@ -1,15 +1,14 @@
 package com.example.mikola11.vkview2.ui;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
 import com.example.mikola11.vkview2.GoToFriendsListEvent;
-import com.example.mikola11.vkview2.ui.login.LoginFragment;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
+import com.example.mikola11.vkview2.ui.login.LoginFragment;
 import com.example.mikola11.vkview2.ui.login.TokenStorage;
 
 import de.greenrobot.event.EventBus;
@@ -26,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        EventBus.getDefault().register(this);
         super.onStart();
+        EventBus.getDefault().register(this);
 
     }
 

@@ -35,9 +35,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.friendName.setText(friendList.get(position).getFullName());
-//        holder.friendIcon.setImageResource(R.drawable.vk_image_loaded);
         Glide.with(mContext).load(friendList.get(position).getPhoto_100())
-                .override(70,70)
                 .centerCrop()
                 .into(holder.friendIcon);
     }

@@ -36,7 +36,14 @@ public class FriendsListFragment extends Fragment {
     public void onEventAsync(PutFriendsDataEvent event){
         if(event.massage!=null){
             friendList.addAll(event.massage);
-            friendsListAdapter.notifyDataSetChanged();
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    friendsListAdapter.notifyDataSetChanged();
+                }
+            });
+
         }else {
             Log.d("NIKI", "Empty massage");
         }
@@ -46,6 +53,7 @@ public class FriendsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.friends_list_fragment, null);
+
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.friendsListRecyclerView);
         friendsListAdapter = new FriendsListAdapter(getActivity(), friendList);

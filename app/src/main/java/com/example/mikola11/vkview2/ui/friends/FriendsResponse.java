@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import retrofit.client.Response;
 
 public class FriendsResponse {
-    private Response response;
     private int count;
     private ArrayList<Friend> items;
 

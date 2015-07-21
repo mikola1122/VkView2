@@ -9,7 +9,6 @@ import com.example.mikola11.vkview2.ui.friends.FResponse;
 import com.example.mikola11.vkview2.ui.friends.Friend;
 import com.example.mikola11.vkview2.ui.friends.FriendsResponse;
 import com.example.mikola11.vkview2.ui.login.TokenStorage;
-import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,6 @@ public class MyApplication extends Application {
 
     Api api;
     String accessToken;
-    Gson gson;
 
     @Override
     public void onCreate() {
@@ -40,7 +38,6 @@ public class MyApplication extends Application {
         accessToken = TokenStorage.getAccesTokenPref(this);
         Map<String, String> parameters = new HashMap<>();
         parameters.put("order", "random");
-//        parameters.put("count", "4");
         parameters.put("fields", "photo_100");
         parameters.put("v", "5.34");
         parameters.put("access_token", accessToken);
