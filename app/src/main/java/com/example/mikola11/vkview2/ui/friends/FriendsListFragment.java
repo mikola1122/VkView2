@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.mikola11.vkview2.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.PutFriendsDataEvent;
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.RequestFriendsDataEvent;
@@ -59,6 +60,14 @@ public class FriendsListFragment extends Fragment {
         friendsListAdapter = new FriendsListAdapter(getActivity(), friendList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
+                new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                EventBus.getDefault().post(new GoToAlbumsFragmentEvent());
+            }
+        }));
 
         recyclerView.setAdapter(friendsListAdapter);
         recyclerView.setLayoutManager(layoutManager);
