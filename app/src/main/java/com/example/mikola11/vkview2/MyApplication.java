@@ -5,6 +5,9 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.mikola11.vkview2.api.Api;
+import com.example.mikola11.vkview2.ui.albums.AResponse;
+import com.example.mikola11.vkview2.ui.albums.Album;
+import com.example.mikola11.vkview2.ui.albums.AlbumsResponse;
 import com.example.mikola11.vkview2.ui.friends.FResponse;
 import com.example.mikola11.vkview2.ui.friends.Friend;
 import com.example.mikola11.vkview2.ui.friends.FriendsResponse;
@@ -34,20 +37,35 @@ public class MyApplication extends Application {
 
 
     public void onEventAsync(RequestFriendsDataEvent event) {
-        Log.d("NIKI", "Send request");
+        Log.d("NIKI", "Send request friends");
         accessToken = TokenStorage.getAccesTokenPref(this);
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("order", "random");
-        parameters.put("fields", "photo_100");
-        parameters.put("v", "5.34");
-        parameters.put("access_token", accessToken);
-        FResponse response1 = api.getFriendsData(parameters);
+        Map<String, String> parametersFriends = new HashMap<>();
+        parametersFriends.put("order", "random");
+        parametersFriends.put("fields", "photo_100");
+        parametersFriends.put("v", "5.34");
+        parametersFriends.put("access_token", accessToken);
+        FResponse responseF = api.getFriendsData(parametersFriends);
 
-        FriendsResponse response = response1.getResponse();
+        FriendsResponse response = responseF.getResponse();
 
         List<Friend> responseItem = response.getItems();
 
         EventBus.getDefault().post(new PutFriendsDataEvent(responseItem));
+    }
+
+    public void onEventAsync(RequestAlbumsDataEvent event){
+        Log.d("NIKI", "Send request albums");
+        Map<String, String> parametersAlbums = new HashMap<>();
+        parametersAlbums.put("owner_id", String.valueOf(event.massage));
+        parametersAlbums.put("need_covers", String.valueOf(1));
+        parametersAlbums.put("v", "5.34");
+        AResponse responseA = api.getAlbumsData(parametersAlbums);
+
+        AlbumsResponse response = responseA.getResponse();
+
+        List<Album> responseItem = response.getItems();
+
+        EventBus.getDefault().post(new PutAlbumsDataEvent(responseItem));
     }
 
     @Override

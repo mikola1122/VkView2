@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.mikola11.vkview2.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.PutFriendsDataEvent;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.RequestAlbumsDataEvent;
 import com.example.mikola11.vkview2.RequestFriendsDataEvent;
 
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class FriendsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void onEventAsync(PutFriendsDataEvent event){
-        if(event.massage!=null){
+    public void onEventAsync(PutFriendsDataEvent event) {
+        if (event.massage != null) {
             friendList.addAll(event.massage);
 
             getActivity().runOnUiThread(new Runnable() {
@@ -45,8 +46,8 @@ public class FriendsListFragment extends Fragment {
                 }
             });
 
-        }else {
-            Log.d("NIKI", "Empty massage");
+        } else {
+            Log.d("NIKI", "Empty friends massage");
         }
     }
 
@@ -63,11 +64,12 @@ public class FriendsListFragment extends Fragment {
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
                 new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                EventBus.getDefault().post(new GoToAlbumsFragmentEvent());
-            }
-        }));
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        EventBus.getDefault().post(new GoToAlbumsFragmentEvent());
+                        EventBus.getDefault().post(new RequestAlbumsDataEvent(friendList.get(position).getId()));
+                    }
+                }));
 
         recyclerView.setAdapter(friendsListAdapter);
         recyclerView.setLayoutManager(layoutManager);
