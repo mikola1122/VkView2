@@ -5,13 +5,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.mikola11.vkview2.GoToAlbumsFragmentEvent;
-import com.example.mikola11.vkview2.GoToFriendsListEvent;
+import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
+import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.event.GoToPhotoFragmentEvent;
+import com.example.mikola11.vkview2.event.GoToPhotosAlbumFragmentEvent;
 import com.example.mikola11.vkview2.ui.albums.AlbumsFragment;
 import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
 import com.example.mikola11.vkview2.ui.login.LoginFragment;
 import com.example.mikola11.vkview2.ui.login.TokenStorage;
+import com.example.mikola11.vkview2.ui.photo.PhotoFragment;
+import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumFragment;
 
 import de.greenrobot.event.EventBus;
 
@@ -62,6 +66,20 @@ public class MainActivity extends AppCompatActivity {
     public void onEvent(GoToAlbumsFragmentEvent event){
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, new AlbumsFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void onEvent(GoToPhotosAlbumFragmentEvent event){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, new PhotosAlbumFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void onEvent(GoToPhotoFragmentEvent event){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, new PhotoFragment())
                 .addToBackStack(null)
                 .commit();
     }

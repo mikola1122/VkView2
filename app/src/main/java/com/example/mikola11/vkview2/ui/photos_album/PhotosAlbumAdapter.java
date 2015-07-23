@@ -1,4 +1,4 @@
-package com.example.mikola11.vkview2.ui.albums;
+package com.example.mikola11.vkview2.ui.photos_album;
 
 
 import android.content.Context;
@@ -7,30 +7,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
 
 import java.util.List;
 
-public class AlbumsAdapter extends BaseAdapter {
-    List<Album> albumList;
+public class PhotosAlbumAdapter extends BaseAdapter {
+    List<PhotoAlbum> photoAlbumList;
     private Context mContext;
 
-    public AlbumsAdapter(Context context, List<Album> albumList) {
-        this.albumList = albumList;
+    public PhotosAlbumAdapter(Context context, List<PhotoAlbum> photoAlbumList) {
+        this.photoAlbumList = photoAlbumList;
         this.mContext = context;
     }
 
     @Override
     public int getCount() {
-        return albumList.size();
+        return photoAlbumList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return albumList.get(position);
+        return photoAlbumList.get(position);
     }
 
     @Override
@@ -42,29 +41,25 @@ public class AlbumsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
 
-        if (convertView == null){
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item_albums_cardview, parent, false);
+            convertView = inflater.inflate(R.layout.item_photos_cardview, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.albumName = (TextView) convertView.findViewById(R.id.vkAlbumItemName);
-            viewHolder.albumIcon = (ImageView) convertView.findViewById(R.id.vkAlbumItemIcon);
+            viewHolder.PhotoAlbumImage = (ImageView) convertView.findViewById(R.id.vkPhotoAlbumItemImage);
             convertView.setTag(viewHolder);
         } else {
-          viewHolder =(ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.albumName.setText(albumList.get(position).getTitle());
-        Glide.with(mContext).load(albumList.get(position).getThumb_src())
+        Glide.with(mContext).load(photoAlbumList.get(position).getPhoto_604())
                 .centerCrop()
-                .into(viewHolder.albumIcon);
+                .into(viewHolder.PhotoAlbumImage);
 
         return convertView;
     }
 
-    static class ViewHolder  {
-        public TextView albumName;
-        public ImageView albumIcon;
+    static class ViewHolder {
+        public ImageView PhotoAlbumImage;
     }
-
 }

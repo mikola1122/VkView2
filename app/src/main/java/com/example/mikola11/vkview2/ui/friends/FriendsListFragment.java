@@ -11,11 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.mikola11.vkview2.GoToAlbumsFragmentEvent;
-import com.example.mikola11.vkview2.PutFriendsDataEvent;
+import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
+import com.example.mikola11.vkview2.event.PutFriendsDataEvent;
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.RequestAlbumsDataEvent;
-import com.example.mikola11.vkview2.RequestFriendsDataEvent;
+import com.example.mikola11.vkview2.event.RequestAlbumsDataEvent;
+import com.example.mikola11.vkview2.event.RequestFriendsDataEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,14 +47,14 @@ public class FriendsListFragment extends Fragment {
             });
 
         } else {
-            Log.d("NIKI", "Empty friends massage");
+            Log.d("NIKI", "Empty friends massage1");
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.friends_list_fragment, null);
+        View v = inflater.inflate(R.layout.fragment_friends_list, null);
 
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.friendsListRecyclerView);
@@ -67,7 +67,8 @@ public class FriendsListFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         EventBus.getDefault().post(new GoToAlbumsFragmentEvent());
-                        EventBus.getDefault().post(new RequestAlbumsDataEvent(friendList.get(position).getId()));
+                        EventBus.getDefault().post(new RequestAlbumsDataEvent(friendList.get(position)
+                                .getId()));
                     }
                 }));
 

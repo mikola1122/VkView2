@@ -7,10 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.mikola11.vkview2.PutAlbumsDataEvent;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.event.GoToPhotosAlbumFragmentEvent;
+import com.example.mikola11.vkview2.event.PutAlbumsDataEvent;
+import com.example.mikola11.vkview2.event.RequestPhotosAlbumDataEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,7 @@ public class AlbumsFragment extends Fragment {
             });
 
         } else {
-            Log.d("NIKI", "Empty albums massage");
+            Log.d("NIKI", "Empty albums massage1");
 
         }
     }
@@ -47,16 +50,25 @@ public class AlbumsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.albums_fragment, null);
+        View v = inflater.inflate(R.layout.fragment_albums, null);
 
         gridView = (GridView) v.findViewById(R.id.albumsGridView);
         albumListAdapter = new AlbumsAdapter(getActivity(), albumList);
         gridView.setAdapter(albumListAdapter);
         adjustGridView();
-
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                EventBus.getDefault().post(new GoToPhotosAlbumFragmentEvent());
+//                int[] massage = {albumList.get(position).getOwner_id(),albumList.get(position).getThumb_id()};
+                EventBus.getDefault().post(new RequestPhotosAlbumDataEvent(albumList.get(position).getOwner_id(),
+                        albumList.get(position).getThumb_id()));
+            }
+        });
         return v;
 
     }
+
 
     private void adjustGridView() {
 //        Configuration configuration = getResources().getConfiguration();

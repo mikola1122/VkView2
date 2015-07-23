@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="text_albums_name_background">#50000000</color>
-    <color name="text_albums_name_color">#ffffff</color>
+    <color name="background_text_albums_name">#50000000</color>
+    <color name="color_text_albums_name">#ffffff</color>
 </resources>

@@ -1,7 +1,5 @@
 package com.example.mikola11.vkview2.ui.login;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,8 +11,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.example.mikola11.vkview2.RequestFriendsDataEvent;
-import com.example.mikola11.vkview2.GoToFriendsListEvent;
+import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.R;
 
 import de.greenrobot.event.EventBus;
@@ -39,7 +36,7 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.login_fragment, null);
+        View v = inflater.inflate(R.layout.fragment_login, null);
         myWebView = (WebView) v.findViewById(R.id.webView);
         myWebView.getSettings().setSaveFormData(true);
         myWebView.clearCache(true);
