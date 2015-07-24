@@ -19,6 +19,9 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.photo.PhotoActivity"
+            android:label="@string/photo_activity"></activity>
 
     </application>
 

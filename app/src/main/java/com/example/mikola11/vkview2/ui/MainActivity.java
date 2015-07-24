@@ -1,33 +1,32 @@
 package com.example.mikola11.vkview2.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
-import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.GoToPhotoFragmentEvent;
 import com.example.mikola11.vkview2.event.GoToPhotosAlbumFragmentEvent;
 import com.example.mikola11.vkview2.ui.albums.AlbumsFragment;
 import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
 import com.example.mikola11.vkview2.ui.login.LoginFragment;
 import com.example.mikola11.vkview2.ui.login.TokenStorage;
-import com.example.mikola11.vkview2.ui.photo.PhotoFragment;
+import com.example.mikola11.vkview2.ui.photo.PhotoActivity;
 import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumFragment;
 
 import de.greenrobot.event.EventBus;
 
 
 public class MainActivity extends AppCompatActivity {
-    public static final String NAME_PREF_TOKEN = "AccessToken";
-    public static final String NAME_PREF_TIME = "ExpiresIn";
-    public static final String NAME_PREF_ID = "UserId";
     public static final String LOG = "NIKI";
 
     public static final String DEFAULT_PREF_TOKEN = "noToken";
-    public static final String DEFAULT_PREF_ID = "userId";
+    public static final String KEY_PHOTO_ACTIVITY_POSITION = "PhotoClickPosition";
+    public static final String KEY_PHOTO_ACTIVITY_URL_LIST = "PhotoListUrl";
 
     @Override
     protected void onStart() {
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_layout);
+        setContentView(R.layout.activity_main);
 
         String storedToken = TokenStorage.getAccesTokenPref(getApplicationContext());
 
@@ -78,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onEvent(GoToPhotoFragmentEvent event){
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, new PhotoFragment())
-                .addToBackStack(null)
-                .commit();
+        Intent intent = new Intent(MainActivity.this, PhotoActivity.class);
+        intent.putExtra(KEY_PHOTO_ACTIVITY_POSITION, event.massagePosition);
+        intent.putExtra(KEY_PHOTO_ACTIVITY_URL_LIST,event.massageUrl);
+        startActivity(intent);
     }
 
     @Override

@@ -60,9 +60,8 @@ public class AlbumsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 EventBus.getDefault().post(new GoToPhotosAlbumFragmentEvent());
-//                int[] massage = {albumList.get(position).getOwner_id(),albumList.get(position).getThumb_id()};
                 EventBus.getDefault().post(new RequestPhotosAlbumDataEvent(albumList.get(position).getOwner_id(),
-                        albumList.get(position).getThumb_id()));
+                        albumList.get(position).getId()));
             }
         });
         return v;

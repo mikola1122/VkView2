@@ -7,6 +7,15 @@ public class PhotoAlbum {
     private String photo_130;
     private String photo_604;
     private String photo_807;
+    private String photo_1280;
+
+    public String getPhoto_1280() {
+        return photo_1280;
+    }
+
+    public void setPhoto_1280(String photo_1280) {
+        this.photo_1280 = photo_1280;
+    }
 
     public String getPhoto_807() {
         return photo_807;

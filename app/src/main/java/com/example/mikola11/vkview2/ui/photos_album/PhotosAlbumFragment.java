@@ -31,8 +31,8 @@ public class PhotosAlbumFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void onEventAsync(PutPhotosAlbumDataEvent event){
-        if (event.massage!=null){
+    public void onEventAsync(PutPhotosAlbumDataEvent event) {
+        if (event.massage != null) {
             photoAlbumList.addAll(event.massage);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -57,7 +57,21 @@ public class PhotosAlbumFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EventBus.getDefault().post(new GoToPhotoFragmentEvent());
+                String[] listUrl = new String[photoAlbumListAdapter.getCount()];
+                for (int i = 0; i < photoAlbumListAdapter.getCount(); i++) {
+                    if (photoAlbumList.get(i).getPhoto_1280() != null) {
+                        listUrl[i] = photoAlbumList.get(i).getPhoto_1280();
+                    } else if (photoAlbumList.get(i).getPhoto_807() != null) {
+                        listUrl[i] = photoAlbumList.get(i).getPhoto_807();
+                    } else if (photoAlbumList.get(i).getPhoto_604() != null) {
+                        listUrl[i] = photoAlbumList.get(i).getPhoto_604();
+                    } else {
+                        listUrl[i] = photoAlbumList.get(i).getPhoto_130();
+                    }
+
+
+                }
+                EventBus.getDefault().post(new GoToPhotoFragmentEvent(position, listUrl));
             }
         });
         return v;
