@@ -31,8 +31,7 @@ import retrofit.RestAdapter;
 
 public class MyApplication extends Application {
 
-    Api api;
-    String accessToken;
+    private Api api;
 
     @Override
     public void onCreate() {
@@ -47,7 +46,7 @@ public class MyApplication extends Application {
 
     public void onEventAsync(RequestFriendsDataEvent event) {
         Log.d("NIKI", "Send request friends");
-        accessToken = TokenStorage.getAccesTokenPref(this);
+        String accessToken = TokenStorage.getAccesTokenPref(this);
         Map<String, String> parametersFriends = new HashMap<>();
         parametersFriends.put("order", "random");
         parametersFriends.put("fields", "photo_100");
@@ -66,7 +65,7 @@ public class MyApplication extends Application {
         Log.d("NIKI", "Send request albums");
         Map<String, String> parametersAlbums = new HashMap<>();
         parametersAlbums.put("owner_id", String.valueOf(event.massage));
-        parametersAlbums.put("need_covers", String.valueOf(1));
+        parametersAlbums.put("need_covers", "1");
         parametersAlbums.put("v", "5.34");
         AResponse responseA = api.getAlbumsData(parametersAlbums);
 
@@ -78,11 +77,11 @@ public class MyApplication extends Application {
     }
     public void onEventAsync(RequestPhotosAlbumDataEvent event){
         Log.d("NIKI", "Send request photos");
-        accessToken = TokenStorage.getAccesTokenPref(this);
+        String accessToken = TokenStorage.getAccesTokenPref(this);
         Map<String, String> parametersPhotosAlbum = new HashMap<>();
         parametersPhotosAlbum.put("owner_id", String.valueOf(event.massageUserId));
         parametersPhotosAlbum.put("album_id", String.valueOf(event.massageAlbumId));
-        parametersPhotosAlbum.put("rev", String.valueOf(0));
+        parametersPhotosAlbum.put("rev", "0");
         parametersPhotosAlbum.put("v", "5.34");
         parametersPhotosAlbum.put("access_token", accessToken);
         PAResponse responsePA = api.getPhotosAlbumData(parametersPhotosAlbum);
