@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
 
 import java.util.List;
 

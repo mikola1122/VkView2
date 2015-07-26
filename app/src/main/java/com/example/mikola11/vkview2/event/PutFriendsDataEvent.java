@@ -1,6 +1,6 @@
 package com.example.mikola11.vkview2.event;
 
-import com.example.mikola11.vkview2.ui.friends.Friend;
+import com.example.mikola11.vkview2.api.entity.Friend;
 
 import java.util.List;
 

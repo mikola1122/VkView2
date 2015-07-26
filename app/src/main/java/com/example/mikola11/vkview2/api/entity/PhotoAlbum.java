@@ -1,4 +1,4 @@
-package com.example.mikola11.vkview2.ui.photos_album;
+package com.example.mikola11.vkview2.api.entity;
 
 public class PhotoAlbum {
     private int id;

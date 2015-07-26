@@ -12,14 +12,13 @@ import com.example.mikola11.vkview2.event.RequestAlbumsDataEvent;
 import com.example.mikola11.vkview2.event.RequestFriendsDataEvent;
 import com.example.mikola11.vkview2.event.RequestPhotosAlbumDataEvent;
 import com.example.mikola11.vkview2.ui.albums.AResponse;
-import com.example.mikola11.vkview2.ui.albums.Album;
-import com.example.mikola11.vkview2.ui.albums.AlbumsResponse;
-import com.example.mikola11.vkview2.ui.friends.FResponse;
-import com.example.mikola11.vkview2.ui.friends.Friend;
-import com.example.mikola11.vkview2.ui.friends.FriendsResponse;
-import com.example.mikola11.vkview2.ui.login.TokenStorage;
-import com.example.mikola11.vkview2.ui.photos_album.PAResponse;
-import com.example.mikola11.vkview2.ui.photos_album.PhotoAlbum;
+import com.example.mikola11.vkview2.api.entity.Album;
+import com.example.mikola11.vkview2.api.entity.AlbumsResponse;
+import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
+import com.example.mikola11.vkview2.api.entity.Friend;
+import com.example.mikola11.vkview2.api.entity.FriendsResponse;
+import com.example.mikola11.vkview2.api.entity.AlbumsResponseWrapper;
+import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
 import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumResponse;
 
 import java.util.HashMap;
@@ -52,7 +51,7 @@ public class MyApplication extends Application {
         parametersFriends.put("fields", "photo_100");
         parametersFriends.put("v", "5.34");
         parametersFriends.put("access_token", accessToken);
-        FResponse responseF = api.getFriendsData(parametersFriends);
+        FriendsResponseWrapper responseF = api.getFriendsData(parametersFriends);
 
         FriendsResponse response = responseF.getResponse();
 
@@ -84,7 +83,7 @@ public class MyApplication extends Application {
         parametersPhotosAlbum.put("rev", "0");
         parametersPhotosAlbum.put("v", "5.34");
         parametersPhotosAlbum.put("access_token", accessToken);
-        PAResponse responsePA = api.getPhotosAlbumData(parametersPhotosAlbum);
+        AlbumsResponseWrapper responsePA = api.getPhotosAlbumData(parametersPhotosAlbum);
 
         PhotosAlbumResponse response = responsePA.getResponse();
 

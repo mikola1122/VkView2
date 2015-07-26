@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.api.entity.Friend;
 
 import java.util.List;
 
@@ -23,7 +24,6 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
         this.friendList = friendList;
         this.mContext = context;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
@@ -44,7 +44,6 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
     public int getItemCount() {
         return friendList.size();
     }
-
 
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView friendName;

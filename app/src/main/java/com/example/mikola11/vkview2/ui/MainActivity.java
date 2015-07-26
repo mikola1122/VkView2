@@ -14,7 +14,7 @@ import com.example.mikola11.vkview2.event.GoToPhotosAlbumFragmentEvent;
 import com.example.mikola11.vkview2.ui.albums.AlbumsFragment;
 import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
 import com.example.mikola11.vkview2.ui.login.LoginFragment;
-import com.example.mikola11.vkview2.ui.login.TokenStorage;
+import com.example.mikola11.vkview2.TokenStorage;
 import com.example.mikola11.vkview2.ui.photo.PhotoActivity;
 import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumFragment;
 

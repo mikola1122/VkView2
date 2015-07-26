@@ -1,7 +1,7 @@
-package com.example.mikola11.vkview2.ui.friends;
+package com.example.mikola11.vkview2.api.entity;
 
 
-public class FResponse {
+public class FriendsResponseWrapper {
     private FriendsResponse response;
 
     public FriendsResponse getResponse() {

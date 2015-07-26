@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.example.mikola11.vkview2.TokenStorage;
 import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.R;
 
@@ -60,7 +61,7 @@ public class LoginFragment extends Fragment {
                     String userId = tokenUri.getQueryParameter(CHECK_ID);
                     int userIdInt=Integer.valueOf(userId);
 
-                    TokenStorage.setAccesTokenPref(getActivity(),accessToken);
+                    TokenStorage.setAccesTokenPref(getActivity(), accessToken);
                     TokenStorage.setUserIdPref(getActivity(),userIdInt);
 
                     Log.d(LOG, "token = " + accessToken);

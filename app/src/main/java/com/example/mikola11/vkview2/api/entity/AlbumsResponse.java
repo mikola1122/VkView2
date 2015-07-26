@@ -1,4 +1,4 @@
-package com.example.mikola11.vkview2.ui.albums;
+package com.example.mikola11.vkview2.api.entity;
 
 
 import java.util.ArrayList;

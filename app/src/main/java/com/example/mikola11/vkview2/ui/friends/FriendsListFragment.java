@@ -11,11 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.mikola11.vkview2.api.entity.Friend;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.event.PutFriendsDataEvent;
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.RequestAlbumsDataEvent;
 import com.example.mikola11.vkview2.event.RequestFriendsDataEvent;
+import com.example.mikola11.vkview2.ui.friends.FriendsListAdapter;
+import com.example.mikola11.vkview2.ui.friends.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +28,8 @@ import de.greenrobot.event.EventBus;
 
 public class FriendsListFragment extends Fragment {
 
-    List<Friend> friendList = new ArrayList<Friend>();
-    FriendsListAdapter friendsListAdapter;
+    private List<Friend> friendList = new ArrayList<Friend>();
+    private FriendsListAdapter friendsListAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,27 +38,21 @@ public class FriendsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void onEventAsync(PutFriendsDataEvent event) {
+    public void onEventMainThread(PutFriendsDataEvent event) {
         if (event.massage != null) {
             friendList.addAll(event.massage);
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    friendsListAdapter.notifyDataSetChanged();
-                }
-            });
-
+            friendsListAdapter.notifyDataSetChanged();
         } else {
-            Log.d("NIKI", "Empty friends massage1");
+            Log.e("NIKI", "Empty friends massage1");
         }
     }
 
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_friends_list, null);
-
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.friendsListRecyclerView);
         friendsListAdapter = new FriendsListAdapter(getActivity(), friendList);
@@ -66,6 +63,8 @@ public class FriendsListFragment extends Fragment {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        // TODO post album data into GoToAlbumsFragmentEvent
+                        // and after into intent extras
                         EventBus.getDefault().post(new GoToAlbumsFragmentEvent());
                         EventBus.getDefault().post(new RequestAlbumsDataEvent(friendList.get(position)
                                 .getId()));

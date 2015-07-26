@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.api.entity.Album;
 
 import java.util.List;
 

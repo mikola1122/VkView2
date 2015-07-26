@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
 import com.example.mikola11.vkview2.event.GoToPhotoFragmentEvent;
 import com.example.mikola11.vkview2.event.PutPhotosAlbumDataEvent;
 

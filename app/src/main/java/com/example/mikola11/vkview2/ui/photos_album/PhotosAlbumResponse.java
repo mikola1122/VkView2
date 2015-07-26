@@ -1,5 +1,7 @@
 package com.example.mikola11.vkview2.ui.photos_album;
 
+import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
+
 import java.util.ArrayList;
 
 public class PhotosAlbumResponse {

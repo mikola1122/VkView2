@@ -1,7 +1,7 @@
 package com.example.mikola11.vkview2.event;
 
 
-import com.example.mikola11.vkview2.ui.photos_album.PhotoAlbum;
+import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
 
 import java.util.List;
 

@@ -1,9 +1,7 @@
-package com.example.mikola11.vkview2.ui.friends;
+package com.example.mikola11.vkview2.api.entity;
 
 
 import java.util.ArrayList;
-
-import retrofit.client.Response;
 
 public class FriendsResponse {
     private int count;
