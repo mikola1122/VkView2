@@ -3,10 +3,11 @@ package com.example.mikola11.vkview2.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.TokenStorage;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.event.GoToPhotoFragmentEvent;
@@ -14,14 +15,13 @@ import com.example.mikola11.vkview2.event.GoToPhotosAlbumFragmentEvent;
 import com.example.mikola11.vkview2.ui.albums.AlbumsFragment;
 import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
 import com.example.mikola11.vkview2.ui.login.LoginFragment;
-import com.example.mikola11.vkview2.TokenStorage;
 import com.example.mikola11.vkview2.ui.photo.PhotoActivity;
 import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumFragment;
 
 import de.greenrobot.event.EventBus;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ActionBarActivity {
     public static final String LOG = "NIKI";
 
     public static final String DEFAULT_PREF_TOKEN = "noToken";

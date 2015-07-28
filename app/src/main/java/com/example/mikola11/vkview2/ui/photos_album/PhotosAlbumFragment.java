@@ -32,17 +32,13 @@ public class PhotosAlbumFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void onEventAsync(PutPhotosAlbumDataEvent event) {
+    public void onEventMainThread(PutPhotosAlbumDataEvent event) {
         if (event.massage != null) {
             photoAlbumList.addAll(event.massage);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    photoAlbumListAdapter.notifyDataSetChanged();
-                }
-            });
+            photoAlbumListAdapter.notifyDataSetChanged();
+
         } else {
-            Log.d("NIKI", "Empty photos albums massage1");
+            Log.e("NIKI", "Empty photos albums massage1");
 
         }
     }

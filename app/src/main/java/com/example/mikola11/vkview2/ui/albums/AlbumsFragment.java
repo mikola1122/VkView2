@@ -31,19 +31,19 @@ public class AlbumsFragment extends Fragment {
         EventBus.getDefault().register(this);
         super.onCreate(savedInstanceState);
     }
-    public void onEventAsync(PutAlbumsDataEvent event){
+    public void onEventMainThread(PutAlbumsDataEvent event){
         if (event.massage!=null){
             albumList.addAll(event.massage);
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
                     albumListAdapter.notifyDataSetChanged();
-                }
-            });
+//                }
+//            });
 
         } else {
-            Log.d("NIKI", "Empty albums massage1");
+            Log.e("NIKI", "Empty albums massage1");
 
         }
     }
