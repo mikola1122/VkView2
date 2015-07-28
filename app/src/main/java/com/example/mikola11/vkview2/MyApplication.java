@@ -11,15 +11,15 @@ import com.example.mikola11.vkview2.event.PutPhotosAlbumDataEvent;
 import com.example.mikola11.vkview2.event.RequestAlbumsDataEvent;
 import com.example.mikola11.vkview2.event.RequestFriendsDataEvent;
 import com.example.mikola11.vkview2.event.RequestPhotosAlbumDataEvent;
-import com.example.mikola11.vkview2.ui.albums.AResponse;
+import com.example.mikola11.vkview2.api.entity.AlbumsResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.Album;
 import com.example.mikola11.vkview2.api.entity.AlbumsResponse;
 import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.Friend;
 import com.example.mikola11.vkview2.api.entity.FriendsResponse;
-import com.example.mikola11.vkview2.api.entity.AlbumsResponseWrapper;
+import com.example.mikola11.vkview2.api.entity.PhotosAlbumResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
-import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumResponse;
+import com.example.mikola11.vkview2.api.entity.PhotosAlbumResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +66,7 @@ public class MyApplication extends Application {
         parametersAlbums.put("owner_id", String.valueOf(event.massage));
         parametersAlbums.put("need_covers", "1");
         parametersAlbums.put("v", "5.34");
-        AResponse responseA = api.getAlbumsData(parametersAlbums);
+        AlbumsResponseWrapper responseA = api.getAlbumsData(parametersAlbums);
 
         AlbumsResponse response = responseA.getResponse();
 
@@ -83,7 +83,7 @@ public class MyApplication extends Application {
         parametersPhotosAlbum.put("rev", "0");
         parametersPhotosAlbum.put("v", "5.34");
         parametersPhotosAlbum.put("access_token", accessToken);
-        AlbumsResponseWrapper responsePA = api.getPhotosAlbumData(parametersPhotosAlbum);
+        PhotosAlbumResponseWrapper responsePA = api.getPhotosAlbumData(parametersPhotosAlbum);
 
         PhotosAlbumResponse response = responsePA.getResponse();
 

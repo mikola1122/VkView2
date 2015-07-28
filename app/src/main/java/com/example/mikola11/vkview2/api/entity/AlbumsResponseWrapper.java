@@ -1,16 +1,13 @@
 package com.example.mikola11.vkview2.api.entity;
 
-
-import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumResponse;
-
 public class AlbumsResponseWrapper {
-    private PhotosAlbumResponse response;
+    private AlbumsResponse response;
 
-    public PhotosAlbumResponse getResponse() {
+    public AlbumsResponse getResponse() {
         return response;
     }
 
-    public void setResponse(PhotosAlbumResponse response) {
+    public void setResponse(AlbumsResponse response) {
         this.response = response;
     }
 }

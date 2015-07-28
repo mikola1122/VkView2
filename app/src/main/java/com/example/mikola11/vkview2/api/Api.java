@@ -1,9 +1,9 @@
 package com.example.mikola11.vkview2.api;
 
 
-import com.example.mikola11.vkview2.ui.albums.AResponse;
-import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.AlbumsResponseWrapper;
+import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
+import com.example.mikola11.vkview2.api.entity.PhotosAlbumResponseWrapper;
 
 import java.util.Map;
 
@@ -16,8 +16,8 @@ public interface Api {
     FriendsResponseWrapper getFriendsData(@QueryMap Map<String, String> parametersFriends);
 
     @GET("/method/photos.getAlbums")
-    AResponse getAlbumsData(@QueryMap Map<String, String> parametersAlbums);
+    AlbumsResponseWrapper getAlbumsData(@QueryMap Map<String, String> parametersAlbums);
 
     @GET("/method/photos.get")
-    AlbumsResponseWrapper getPhotosAlbumData(@QueryMap Map<String, String> parametersPhotosAlbum);
+    PhotosAlbumResponseWrapper getPhotosAlbumData(@QueryMap Map<String, String> parametersPhotosAlbum);
 }
