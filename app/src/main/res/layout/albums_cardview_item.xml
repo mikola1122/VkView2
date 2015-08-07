@@ -22,8 +22,8 @@
             android:layout_alignParentStart="true">
 
             <ImageView
-                android:layout_width="198dp"
-                android:layout_height="132dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:id="@+id/vkAlbumItemIcon"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />

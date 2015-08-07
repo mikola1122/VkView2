@@ -14,20 +14,16 @@ import android.webkit.WebViewClient;
 import com.example.mikola11.vkview2.TokenStorage;
 import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.ui.MainActivity;
 
 import de.greenrobot.event.EventBus;
 
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements LoginInterf {
 
     private WebView myWebView;
     public static final String CHECK_TOKEN = "access_token";
-    public static final String CHECK_TIME = "expires_in";
     public static final String CHECK_ID = "user_id";
-
-    public static final String NAME_PREF_TOKEN = "AccessToken";
-    public static final String NAME_PREF_TIME = "ExpiresIn";
-    public static final String NAME_PREF_ID = "UserId";
 
     public static final String LOG = "NIKI";
 
@@ -38,14 +34,26 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, null);
+
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((MainActivity) getActivity()).setSearchVisibility(false);
+        Log.d("NIKI", "Main toolbar not show");
+
         myWebView = (WebView) v.findViewById(R.id.webView);
         myWebView.getSettings().setSaveFormData(true);
         myWebView.clearCache(true);
         myWebView.loadUrl(getString(R.string.url_start));
 
+        loadAccessToken();
 
+        return v;
+
+
+    }
+
+    private void loadAccessToken() {
         myWebView.setWebViewClient(new WebViewClient() {
-
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -53,9 +61,7 @@ public class LoginFragment extends Fragment {
                 Log.d(LOG, "URL = " + url);
 
                 if (url.contains(REDIRECT_URI)) {
-
                     url = url.replace("#", "?");
-
                     Uri tokenUri = Uri.parse(url);
                     String accessToken = tokenUri.getQueryParameter(CHECK_TOKEN);
                     String userId = tokenUri.getQueryParameter(CHECK_ID);
@@ -74,10 +80,6 @@ public class LoginFragment extends Fragment {
                 return false;
             }
         });
-
-        return v;
-
-
     }
 
 

@@ -32,7 +32,7 @@
                 android:id="@+id/vkAlbumItemName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textAlignment="center"
                 android:textColor="@color/color_text_albums_name"
                 android:background="@color/background_text_albums_name"

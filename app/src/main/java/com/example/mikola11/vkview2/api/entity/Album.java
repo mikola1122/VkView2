@@ -1,8 +1,13 @@
 package com.example.mikola11.vkview2.api.entity;
 
 public class Album {
-    private int id, thumb_id, owner_id, size;
-    private String title, description, thumb_src;
+    private int id;
+    private int thumb_id;
+    private int owner_id;
+    private int size;
+    private String title;
+    private String description;
+    private String thumb_src;
 
     public String getThumb_src() {
         return thumb_src;

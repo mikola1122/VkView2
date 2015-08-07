@@ -3,18 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/image_horizontal_margin"
-    android:paddingBottom="@dimen/image_horizontal_margin"
-    android:paddingLeft="@dimen/image_vertical_margin"
-    android:paddingRight="@dimen/image_vertical_margin"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/fragment"
+    <include
+        android:id="@+id/toolbarMain"
+        layout="@layout/toolbar_main" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_below="@+id/toolbarMain"
+        android:paddingTop="@dimen/image_horizontal_margin"
+        android:paddingBottom="@dimen/image_horizontal_margin"
+        android:paddingLeft="@dimen/image_vertical_margin"
+        android:paddingRight="@dimen/image_vertical_margin">
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true">
+
+        </FrameLayout>
+    </RelativeLayout>
 </RelativeLayout>

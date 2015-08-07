@@ -6,6 +6,15 @@ public class Friend {
     private String first_name;
     private String last_name;
     private String photo_100;
+    private String deactivated;
+
+    public String getDeactivated() {
+        return deactivated;
+    }
+
+    public void setDeactivated(String deactivated) {
+        this.deactivated = deactivated;
+    }
 
     public int getId() {
         return id;

@@ -2,6 +2,8 @@ package com.example.mikola11.vkview2.ui.photos_album;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class PhotosAlbumAdapter extends BaseAdapter {
     List<PhotoAlbum> photoAlbumList;
@@ -39,7 +42,7 @@ public class PhotosAlbumAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
 
         if (convertView == null) {

@@ -1,8 +1,39 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="AppTheme.Base">
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="Transparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.MyApp.ActionBarPhoto" parent="Widget.AppCompat.ActionBar">
+        <!-- My second Toolbar theme here. -->
+        <item name="android:background">@drawable/photo_toolbar_bg</item>
+        <item name="theme">@style/ThemeOverlay.MyApp.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+    <style name="Widget.MyApp.ActionBarMain" parent="Widget.AppCompat.ActionBar">
+        <!-- My second Toolbar theme here. -->
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="theme">@style/ThemeOverlay.MyApp.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="ThemeOverlay.MyApp.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <!-- Toolbar text color here. -->
+        <item name="android:textColor">@color/actionMenuTextColor</item>
+        <item name="android:textColorPrimary">@color/actionMenuTextColor</item>
     </style>
 
 </resources>

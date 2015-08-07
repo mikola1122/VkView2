@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#E9EDF1</color>
+    <color name="colorPrimaryDark">#4E729A</color>
+    <color name="colorStartBackgroundTranslucentToolbar">#f14E729A</color>
+    <color name="colorEndBackgroundTranslucentToolbar">#50E9EDF1</color>
+    <color name="actionMenuTextColor">#FFFFFF</color>
+
     <color name="background_text_albums_name">#50000000</color>
     <color name="color_text_albums_name">#ffffff</color>
 </resources>

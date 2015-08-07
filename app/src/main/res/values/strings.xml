@@ -4,4 +4,8 @@
                 "photos,offline&amp;redirect_uri=https://oauth.vk.com/blank.html&amp;" +
                 "display=mobile&amp;v=5.34&amp;response_type=token</string>
     <string name="photo_activity">Photo</string>
+
+    <string name="share_title">Share photo</string>
+    <string name="search_title">Search</string>
+
 </resources>
