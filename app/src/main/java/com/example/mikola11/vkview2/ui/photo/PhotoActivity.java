@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -24,11 +23,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.event.PhotoClickEvent;
 import com.example.mikola11.vkview2.event.SendBitmapPhotoToShareEvent;
-import com.example.mikola11.vkview2.ui.MainActivity;
-
-import java.io.ByteArrayOutputStream;
 
 import de.greenrobot.event.EventBus;
 
@@ -47,7 +42,7 @@ public class PhotoActivity extends AppCompatActivity {
     private MyShareActionProvider mShareActionProvider;
     private Bitmap theBitmap;
     Intent intent;
-    ByteArrayOutputStream bos;
+    public boolean clickCounter = false;
 
     private static final TimeInterpolator sDecelerator = new DecelerateInterpolator();
     private static final TimeInterpolator sAccelerator = new AccelerateInterpolator();
@@ -107,7 +102,7 @@ public class PhotoActivity extends AppCompatActivity {
         mBackground = new ColorDrawable(Color.BLACK);
         mTopLevelLayout.setBackground(mBackground);
 
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             ViewTreeObserver observer = viewPager.getViewTreeObserver();
             observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
@@ -130,6 +125,23 @@ public class PhotoActivity extends AppCompatActivity {
             });
         }
         initToolbar();
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                getSupportActionBar().hide();
+                clickCounter = !clickCounter;
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         Log.d("NIKI", String.valueOf(positionClick));
         Log.d("NIKI", photoUrlArray[positionClick]);
@@ -187,7 +199,6 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_photo_toolbar, menu);
@@ -195,18 +206,8 @@ public class PhotoActivity extends AppCompatActivity {
 
         mShareActionProvider = new MyShareActionProvider(PhotoActivity.this);
         MenuItemCompat.setActionProvider(itemShare, mShareActionProvider);
-
-
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, photoPagerAdapter.urlSharePhoto);
-        shareIntent.setType("image/jpeg");
-        setShareIntent(shareIntent);
-
-
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -224,6 +225,10 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     protected void onDestroy() {
@@ -232,30 +237,25 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
 
-//    public void onEvent(SendBitmapPhotoToShareEvent event){
-//
-//        Log.e("NIKI","event received");
-//
-//        if (event.massage==null){
-//            Log.e("NIKI", "bitmap photo is empty");
-//        } else {
-//            bos = new ByteArrayOutputStream();
-//            event.massage.compress(Bitmap.CompressFormat.PNG, 0, bos);
-//            intent = new Intent();
-//            intent.setAction(Intent.ACTION_SEND);
-//            intent.setType("*/*");
-//            intent.putExtra(Intent.EXTRA_STREAM, bos.toByteArray());
-//            setShareIntent(intent);
-//            Log.e("NIKI", "bitmap photo is full" + bos.toByteArray());
-//        }
-//    }
+    public void onEvent(SendBitmapPhotoToShareEvent event) {
 
-    public void onEvent(PhotoClickEvent event){
-        if (event.massage) {
+        Log.e("NIKI", "event received");
+
+        if (event.massage == null) {
+            Log.e("NIKI", "bitmap photo is empty");
+        } else {
+            intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_STREAM, event.massage);
+            setShareIntent(intent);
+            Log.e("NIKI", "bitmap photo is full" + event.massage);
+        }
+        if (clickCounter) {
             getSupportActionBar().show();
         } else {
             getSupportActionBar().hide();
         }
-
+        clickCounter = !clickCounter;
     }
 }

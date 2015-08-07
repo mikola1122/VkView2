@@ -1,12 +1,12 @@
 package com.example.mikola11.vkview2.event;
 
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 
 public class SendBitmapPhotoToShareEvent {
-    public Bitmap massage;
+    public Uri massage;
 
-    public SendBitmapPhotoToShareEvent(Bitmap massage) {
+    public SendBitmapPhotoToShareEvent(Uri massage) {
         this.massage = massage;
     }
 }
