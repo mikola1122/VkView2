@@ -4,9 +4,7 @@ package com.example.mikola11.vkview2.ui;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -14,25 +12,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.TokenStorage;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
-import com.example.mikola11.vkview2.event.GoToPhotoFragmentEvent;
+import com.example.mikola11.vkview2.event.GoToPhotoActivityEvent;
 import com.example.mikola11.vkview2.event.GoToPhotosAlbumFragmentEvent;
 import com.example.mikola11.vkview2.event.SendSearchFriendEvent;
 import com.example.mikola11.vkview2.ui.albums.AlbumsFragment;
-import com.example.mikola11.vkview2.ui.albums.AlbumInterf;
 import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
-import com.example.mikola11.vkview2.ui.friends.SearchInterf;
 import com.example.mikola11.vkview2.ui.login.LoginFragment;
-import com.example.mikola11.vkview2.ui.login.LoginInterf;
 import com.example.mikola11.vkview2.ui.photo.PhotoActivity;
 import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumFragment;
-import com.example.mikola11.vkview2.ui.photos_album.PhotosInterf;
-
-import java.io.ByteArrayOutputStream;
+import com.example.mikola11.vkview2.utils.TokenStorage;
 
 import de.greenrobot.event.EventBus;
 
@@ -50,10 +43,14 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEY_ORIENTATION = "Orientation";
     public static final String KEY_BITMAP = "Image Bitmap";
 
+    public static final String KEY_TITLE = "Title";
+    public static final String KEY_TABLET = "isTablet";
+
     public Toolbar toolbar;
     public MenuItem searchMenuItem;
     private String photosTitle;
-    private Boolean z;
+    private Boolean visibilityBull;
+    private Boolean isTablet;
 
     @Override
     protected void onStart() {
@@ -71,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
         chooseStartFragment();
 
+        FrameLayout fragment2 = (FrameLayout) findViewById(R.id.fragment2);
+        isTablet = (fragment2 != null);
     }
 
     private void chooseStartFragment() {
@@ -80,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
         if (storedToken.equals(DEFAULT_PREF_TOKEN)) {
             invalidateOptionsMenu();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment, new LoginFragment()).commit();
+                    .add(R.id.fragment1, new LoginFragment()).commit();
         } else {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment, new FriendsListFragment()).commit();
+                    .add(R.id.fragment1, new FriendsListFragment()).commit();
         }
 
         Log.d(LOG, this.getLocalClassName() + " access_token = " + storedToken);
@@ -120,41 +119,17 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        searchMenuItem.setVisible(z);
-
-//        Fragment currentFragment = this.getSupportFragmentManager().findFragmentById(R.id.fragment);
-//        if ((currentFragment instanceof AlbumInterf) && currentFragment.isVisible()) {
-//            getSupportActionBar().show();
-//            getSupportActionBar().setDisplayShowTitleEnabled(true);
-//            getSupportActionBar().setTitle(albumTitle);
-//            searchMenuItem.setVisible(false);
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            Log.d("NIKI", "Main toolbar show, but search item not visible");
-//        } else if ((currentFragment instanceof PhotosInterf) && currentFragment.isVisible()) {
-//            getSupportActionBar().show();
-//            getSupportActionBar().setDisplayShowTitleEnabled(true);
-//            getSupportActionBar().setTitle(photosTitle);
-//            searchMenuItem.setVisible(false);
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            Log.d("NIKI", "Main toolbar show, but search item not visible (PhotoToolbar)");
-//        } else if ((currentFragment instanceof LoginInterf) && currentFragment.isVisible()) {
-//            getSupportActionBar().hide();
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//            searchMenuItem.setVisible(false);
-//            Log.d("NIKI", "Main toolbar not show");
-//        } else if ((currentFragment instanceof SearchInterf) && currentFragment.isVisible()) {
-//            getSupportActionBar().show();
-//            getSupportActionBar().setDisplayShowTitleEnabled(false);
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//            searchMenuItem.setVisible(true);
-//            Log.d("NIKI", "Main toolbar show and visible search");
-//        }
-
+        searchMenuItem.setVisible(visibilityBull);
         return true;
     }
 
-    public void setSearchVisibility(Boolean zz) {
-        z = zz;
+    public void setSearchVisibilCompletedLoad(Boolean visiblBool) {
+        visibilityBull = visiblBool;
+
+        return;
+    }
+    public void setSearchVisibilityincompleteLoad(Boolean visiblBool) {
+        searchMenuItem.setVisible(visiblBool);
         return;
     }
 
@@ -192,41 +167,60 @@ public class MainActivity extends AppCompatActivity {
     public void onEvent(GoToFriendsListEvent event) {
         invalidateOptionsMenu();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, new FriendsListFragment())
+                .replace(R.id.fragment1, new FriendsListFragment())
                 .commit();
 
     }
 
     public void onEvent(GoToAlbumsFragmentEvent event) {
-        invalidateOptionsMenu();
         Bundle bundle = new Bundle();
-        bundle.putString("AlbumTitle", event.massage);
+        bundle.putString(KEY_TITLE, event.massage);
+        bundle.putBoolean(KEY_TABLET, isTablet);
         AlbumsFragment albumsFragment = new AlbumsFragment();
         albumsFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, albumsFragment)
-                .addToBackStack(null)
-                .commit();
+
+        if (isTablet) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment2, albumsFragment)
+                    .commit();
+            Log.d("MIKI", "THIS IS TABLEEEET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        } else {
+            invalidateOptionsMenu();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment1, albumsFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
     }
 
     public void onEvent(GoToPhotosAlbumFragmentEvent event) {
         photosTitle = event.massage;
-        invalidateOptionsMenu();
         Bundle bundle = new Bundle();
         bundle.putString("PhotosTitle", event.massage);
         PhotosAlbumFragment photosFragment = new PhotosAlbumFragment();
         photosFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, photosFragment)
-                .addToBackStack(null)
-                .commit();
+
+        if (isTablet){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment2, photosFragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            invalidateOptionsMenu();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment1, photosFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+
     }
 
-    public void onEvent(GoToPhotoFragmentEvent event) {
+    public void onEvent(GoToPhotoActivityEvent event) {
         invalidateOptionsMenu();
         int orientation = getResources().getConfiguration().orientation;
-//        ByteArrayOutputStream bs = new ByteArrayOutputStream();
-//        event.massageBitmap.compress(Bitmap.CompressFormat.PNG, 100, bs);
+
         Intent intent = new Intent(MainActivity.this, PhotoActivity.class);
         intent.putExtra(KEY_PHOTO_ACTIVITY_POSITION, event.massagePosition)
                 .putExtra(KEY_PHOTO_ACTIVITY_URL_LIST, event.massageUrl)
@@ -235,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
                 .putExtra(KEY_PHOTO_TOP, event.massageLocation[1])
                 .putExtra(KEY_PHOTO_WEIGHT, event.massageWidth)
                 .putExtra(KEY_PHOTO_HEIGHT, event.massageHeight);
-//                .putExtra(KEY_BITMAP, bs.toByteArray());
         startActivity(intent);
         overridePendingTransition(0, 0);
     }

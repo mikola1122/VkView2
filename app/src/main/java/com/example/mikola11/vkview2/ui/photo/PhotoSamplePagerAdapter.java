@@ -6,16 +6,19 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.SendBitmapPhotoToShareEvent;
+import com.example.mikola11.vkview2.utils.TouchImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,15 +30,18 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
 
     String[] photoUrl;
     Context mContext;
+    Bitmap myResource;
 
     public String urlSharePhoto;
     public ImageView v;
     public Bitmap theBitmap;
+    public static final String TAG_IMAGE_VIEW = "myPhotoImage";
+    private final LayoutInflater mInflater;
 
     public PhotoSamplePagerAdapter(String[] pages, Context context) {
         this.photoUrl = pages;
         this.mContext = context;
-//        this.theBitmap = theBitmap;
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
@@ -46,17 +52,20 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == ((ImageView) object);
+        return view == ((FrameLayout) object);
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        v = new ImageView(mContext);
+        View root = (ViewGroup) mInflater.inflate(R.layout.item_photo_frame, null);
+        root.setTag(TAG_IMAGE_VIEW + position);
+
+        v = (TouchImageView) root.findViewById(R.id.image);
         v.setPadding(0, 0, 0, 0);
-        v.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        int mPosition = position;
+        v.setScaleType(TouchImageView.ScaleType.FIT_CENTER);
+//        v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.MATCH_PARENT));
+        final int localPosition = position;
 
 
 //        v.setImageBitmap(theBitmap);
@@ -67,21 +76,22 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
                 .into(v);
 
 
-        ((ViewPager) container).addView(v, 0);
+        ((ViewPager) container).addView(root, 0);
 
         urlSharePhoto = photoUrl[position];
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(new SendBitmapPhotoToShareEvent(getLocalBitmapUri((ImageView) view )));
+//                PhotoUri myPhotoUri = new PhotoUri();
+//                Uri uriPhoto = myPhotoUri.getLocalBitmapUri((ImageView) view);
+                EventBus.getDefault().post(new SendBitmapPhotoToShareEvent(getLocalBitmapUri((ImageView) view)));
                 Log.d("NIKI", urlSharePhoto);
             }
         });
 
-        return v;
+        return root;
     }
-
 
 
     public Uri getLocalBitmapUri(ImageView imageView) {
@@ -110,32 +120,7 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public int getItemPosition(Object object) {
-        return super.getItemPosition(object);
-    }
-
-
-    @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        ((ViewPager) container).removeView((ImageView) object);
+        ((ViewPager) container).removeView((FrameLayout) object);
     }
-
-    @Override
-    public void finishUpdate(ViewGroup container) {
-    }
-
-    @Override
-    public void restoreState(Parcelable state, ClassLoader loader) {
-    }
-
-    @Override
-    public Parcelable saveState() {
-        return null;
-    }
-
-    @Override
-    public void startUpdate(ViewGroup container) {
-    }
-
-
 }

@@ -13,7 +13,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.api.entity.Album;
+import com.example.mikola11.vkview2.api.entity.AlbumsResponseWrapper;
 import com.example.mikola11.vkview2.event.GoToPhotosAlbumFragmentEvent;
 import com.example.mikola11.vkview2.event.PutAlbumsDataEvent;
 import com.example.mikola11.vkview2.event.RequestPhotosAlbumDataEvent;
@@ -25,17 +25,20 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 public class AlbumsFragment extends Fragment implements AlbumInterf {
-    List<Album> albumList = new ArrayList<Album>();
+    List<AlbumsResponseWrapper.Album> albumList = new ArrayList<AlbumsResponseWrapper.Album>();
     AlbumsAdapter albumListAdapter;
     GridView gridView;
     int size;
     String titleToolbar;
 
 
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     public void onEventMainThread(PutAlbumsDataEvent event){
         if (event.massage!=null){
             albumList.addAll(event.massage);
@@ -53,6 +56,13 @@ public class AlbumsFragment extends Fragment implements AlbumInterf {
         }
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((MainActivity) getActivity()).setSearchVisibilityincompleteLoad(false);
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,8 +71,9 @@ public class AlbumsFragment extends Fragment implements AlbumInterf {
 
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(this.getArguments().getString("AlbumTitle"));
-        ((MainActivity) getActivity()).setSearchVisibility(false);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(this.getArguments()
+                .getString(MainActivity.KEY_TITLE));
+        ((MainActivity) getActivity()).setSearchVisibilCompletedLoad(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Log.d("NIKI", "Main toolbar show, but search item not visible");
 
@@ -74,11 +85,11 @@ public class AlbumsFragment extends Fragment implements AlbumInterf {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 size = albumList.get(position).getSize();
-                if (size>0){
+                if (size > 0) {
                     titleToolbar = albumList.get(position).getTitle();
                     EventBus.getDefault().post(new GoToPhotosAlbumFragmentEvent(titleToolbar));
                     EventBus.getDefault().post(new RequestPhotosAlbumDataEvent(albumList.get(position)
-                            .getOwner_id(),albumList.get(position).getId()));
+                            .getOwner_id(), albumList.get(position).getId()));
                 } else {
                     Toast toast = Toast.makeText(getActivity(),
                             "There are no photos in this album.",
@@ -90,15 +101,20 @@ public class AlbumsFragment extends Fragment implements AlbumInterf {
                 }
             }
         });
-        return v;
 
+        return v;
     }
 
 
     private void adjustGridView() {
+
 //        Configuration configuration = getResources().getConfiguration();
 //        if (configuration.orientation==Configuration.ORIENTATION_PORTRAIT){
-            gridView.setNumColumns(GridView.AUTO_FIT);
+        if (this.getArguments().getBoolean(MainActivity.KEY_TABLET)) {
+            gridView.setNumColumns(4);
+        } else {
+            gridView.setNumColumns(2);
+        }
 //        }else if (configuration.orientation==Configuration.ORIENTATION_LANDSCAPE){
 //            gridView.setNumColumns(4);
 //        }

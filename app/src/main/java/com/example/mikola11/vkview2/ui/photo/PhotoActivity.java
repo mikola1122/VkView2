@@ -4,11 +4,12 @@ package com.example.mikola11.vkview2.ui.photo;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -17,10 +18,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.SendBitmapPhotoToShareEvent;
@@ -40,7 +43,6 @@ public class PhotoActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private MyShareActionProvider mShareActionProvider;
-    private Bitmap theBitmap;
     Intent intent;
     public boolean clickCounter = false;
 
@@ -72,7 +74,6 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        EventBus.getDefault().register(this);
         super.onStart();
     }
 
@@ -90,8 +91,7 @@ public class PhotoActivity extends AppCompatActivity {
         thumbnailTop = bundle.getInt(KEY_PHOTO_TOP);
         thumbnailWidth = bundle.getInt(KEY_PHOTO_WEIGHT);
         thumbnailHeight = bundle.getInt(KEY_PHOTO_HEIGHT);
-//        theBitmap = BitmapFactory.decodeByteArray(bundle.getByteArray(KEY_BITMAP), 0,
-//                bundle.getByteArray(KEY_BITMAP).length);
+
 
         mTopLevelLayout = (FrameLayout) findViewById(R.id.topLevelLayout);
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -129,30 +129,41 @@ public class PhotoActivity extends AppCompatActivity {
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                getSupportActionBar().hide();
-                clickCounter = !clickCounter;
+
             }
 
             @Override
             public void onPageSelected(int position) {
+                // todo  setShareIntent();
+//                ImageView image = (ImageView) viewPager.getFocusedChild();
+                ViewGroup image = (ViewGroup) viewPager.findViewWithTag(PhotoSamplePagerAdapter
+                        .TAG_IMAGE_VIEW + viewPager.getCurrentItem());
+                Log.d("SuperTag", "View "+image);
+//                PhotoUri myPhotoUri = new PhotoUri();
+//                Uri uriPhoto = myPhotoUri.getLocalBitmapUri(image);
+//                intent = new Intent();
+//                intent.setAction(Intent.ACTION_SEND);
+//                intent.setType("image/*");
+//                intent.putExtra(Intent.EXTRA_STREAM, uriPhoto);
+//                setShareIntent(intent);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+//                Log.d("NIKI", "onPageScrolled " + clickCounter);
+//                if (clickCounter){
+//                    clickCounter = !clickCounter;
+//                    getSupportActionBar().hide();
+//                }
             }
         });
 
         Log.d("NIKI", String.valueOf(positionClick));
         Log.d("NIKI", photoUrlArray[positionClick]);
+
     }
 
-    /**
-     * The enter animation scales the picture in from its previous thumbnail
-     * size/location, colorizing it in parallel. In parallel, the background of the
-     * activity is fading in. When the pictue is in place, the text description
-     * drops down.
-     */
+
     public void runEnterAnimation() {
         final long duration = (long) (ANIM_DURATION);
 
@@ -176,14 +187,6 @@ public class PhotoActivity extends AppCompatActivity {
         ObjectAnimator bgAnim = ObjectAnimator.ofInt(mBackground, "alpha", 0, 255);
         bgAnim.setDuration(duration);
         bgAnim.start();
-
-        // Animate a color filter to take the image from grayscale to full color.
-        // This happens in parallel with the image scaling and moving into place.
-        ObjectAnimator colorizer = ObjectAnimator.ofFloat(PhotoActivity.this,
-                "saturation", 0, 1);
-        colorizer.setDuration(duration);
-        colorizer.start();
-
     }
 
     private void initToolbar() {
@@ -206,6 +209,15 @@ public class PhotoActivity extends AppCompatActivity {
 
         mShareActionProvider = new MyShareActionProvider(PhotoActivity.this);
         MenuItemCompat.setActionProvider(itemShare, mShareActionProvider);
+
+        itemShare.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.d("superTag", "View " + viewPager.getFocusedChild());
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -227,20 +239,22 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        EventBus.getDefault().register(this);
         super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
-
     public void onEvent(SendBitmapPhotoToShareEvent event) {
-
-        Log.e("NIKI", "event received");
-
         if (event.massage == null) {
             Log.e("NIKI", "bitmap photo is empty");
         } else {
@@ -249,13 +263,12 @@ public class PhotoActivity extends AppCompatActivity {
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_STREAM, event.massage);
             setShareIntent(intent);
-            Log.e("NIKI", "bitmap photo is full" + event.massage);
         }
+        clickCounter = !clickCounter;
         if (clickCounter) {
             getSupportActionBar().show();
         } else {
             getSupportActionBar().hide();
         }
-        clickCounter = !clickCounter;
     }
 }

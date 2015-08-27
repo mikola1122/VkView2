@@ -2,19 +2,11 @@ package com.example.mikola11.vkview2;
 
 
 import android.app.Application;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.example.mikola11.vkview2.api.Api;
-import com.example.mikola11.vkview2.api.entity.Album;
-import com.example.mikola11.vkview2.api.entity.AlbumsResponse;
 import com.example.mikola11.vkview2.api.entity.AlbumsResponseWrapper;
-import com.example.mikola11.vkview2.api.entity.Friend;
-import com.example.mikola11.vkview2.api.entity.FriendsResponse;
 import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
-import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
-import com.example.mikola11.vkview2.api.entity.PhotosAlbumResponse;
 import com.example.mikola11.vkview2.api.entity.PhotosAlbumResponseWrapper;
 import com.example.mikola11.vkview2.event.PutAlbumsDataEvent;
 import com.example.mikola11.vkview2.event.PutFriendsDataEvent;
@@ -22,17 +14,14 @@ import com.example.mikola11.vkview2.event.PutPhotosAlbumDataEvent;
 import com.example.mikola11.vkview2.event.RequestAlbumsDataEvent;
 import com.example.mikola11.vkview2.event.RequestFriendsDataEvent;
 import com.example.mikola11.vkview2.event.RequestPhotosAlbumDataEvent;
-import com.example.mikola11.vkview2.utils.CheckConnection;
+import com.example.mikola11.vkview2.utils.TokenStorage;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
-import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class MyApplication extends Application {
 
@@ -60,11 +49,7 @@ public class MyApplication extends Application {
         parametersFriends.put("access_token", accessToken);
         FriendsResponseWrapper responseF = api.getFriendsData(parametersFriends);
 
-        FriendsResponse response = responseF.getResponse();
-
-        List<Friend> responseItem = response.getItems();
-
-        EventBus.getDefault().post(new PutFriendsDataEvent(responseItem));
+        EventBus.getDefault().post(new PutFriendsDataEvent(responseF.getResponse().getItems()));
     }
 
     public void onEventAsync(RequestAlbumsDataEvent event) {
@@ -76,11 +61,7 @@ public class MyApplication extends Application {
         parametersAlbums.put("v", "5.34");
         AlbumsResponseWrapper responseA = api.getAlbumsData(parametersAlbums);
 
-        AlbumsResponse response = responseA.getResponse();
-
-        List<Album> responseItem = response.getItems();
-
-        EventBus.getDefault().post(new PutAlbumsDataEvent(responseItem));
+        EventBus.getDefault().post(new PutAlbumsDataEvent(responseA.getResponse().getItems()));
     }
 
     public void onEventAsync(RequestPhotosAlbumDataEvent event) {
@@ -94,11 +75,7 @@ public class MyApplication extends Application {
         parametersPhotosAlbum.put("access_token", accessToken);
         PhotosAlbumResponseWrapper responsePA = api.getPhotosAlbumData(parametersPhotosAlbum);
 
-        PhotosAlbumResponse response = responsePA.getResponse();
-
-        List<PhotoAlbum> responseItem = response.getItems();
-
-        EventBus.getDefault().post(new PutPhotosAlbumDataEvent(responseItem));
+        EventBus.getDefault().post(new PutPhotosAlbumDataEvent(responsePA.getResponse().getItems()));
     }
 
     @Override

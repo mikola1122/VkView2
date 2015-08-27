@@ -9,9 +9,11 @@
         android:id="@+id/toolbarMain"
         layout="@layout/toolbar_main" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="11"
         android:layout_below="@+id/toolbarMain"
         android:paddingTop="@dimen/image_horizontal_margin"
         android:paddingBottom="@dimen/image_horizontal_margin"
@@ -20,11 +22,20 @@
 
         <FrameLayout
             android:id="@+id/fragment1"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="2"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true">
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-        </FrameLayout>
-    </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/fragment2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/fragment1"
+            android:layout_toEndOf="@+id/fragment1" />
+    </LinearLayout>
 </RelativeLayout>

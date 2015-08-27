@@ -11,15 +11,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.api.entity.Album;
+import com.example.mikola11.vkview2.api.entity.AlbumsResponseWrapper;
 
 import java.util.List;
 
 public class AlbumsAdapter extends BaseAdapter {
-    List<Album> albumList;
+    List<AlbumsResponseWrapper.Album> albumList;
     private Context mContext;
 
-    public AlbumsAdapter(Context context, List<Album> albumList) {
+    public AlbumsAdapter(Context context, List<AlbumsResponseWrapper.Album> albumList) {
         this.albumList = albumList;
         this.mContext = context;
     }
@@ -56,6 +56,7 @@ public class AlbumsAdapter extends BaseAdapter {
         }
 
         viewHolder.albumName.setText(albumList.get(position).getTitle());
+        viewHolder.albumName.setSelected(true);
         Glide.with(mContext).load(albumList.get(position).getThumb_src())
                 .centerCrop()
                 .into(viewHolder.albumIcon);

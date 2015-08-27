@@ -2,14 +2,9 @@ package com.example.mikola11.vkview2.ui.photos_album;
 
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +12,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
-import com.example.mikola11.vkview2.event.GoToPhotoFragmentEvent;
+import com.example.mikola11.vkview2.api.entity.PhotosAlbumResponseWrapper;
+import com.example.mikola11.vkview2.event.GoToPhotoActivityEvent;
 import com.example.mikola11.vkview2.event.PutPhotosAlbumDataEvent;
 import com.example.mikola11.vkview2.ui.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import de.greenrobot.event.EventBus;
 
@@ -37,7 +28,7 @@ public class PhotosAlbumFragment extends Fragment implements PhotosInterf {
     private String[] listUrl;
     private int positionClick;
 
-    List<PhotoAlbum> photoAlbumList = new ArrayList<PhotoAlbum>();
+    List<PhotosAlbumResponseWrapper.PhotoAlbum> photoAlbumList = new ArrayList<PhotosAlbumResponseWrapper.PhotoAlbum>();
     PhotosAlbumAdapter photoAlbumListAdapter;
     GridView gridView;
     Bitmap onPhotoClickBitmap;
@@ -70,7 +61,7 @@ public class PhotosAlbumFragment extends Fragment implements PhotosInterf {
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(this.getArguments().getString("PhotosTitle"));
-        ((MainActivity) getActivity()).setSearchVisibility(false);
+        ((MainActivity) getActivity()).setSearchVisibilCompletedLoad(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Log.d("NIKI", "Main toolbar show, but search item not visible (PhotoToolbar)");
 
@@ -124,7 +115,7 @@ public class PhotosAlbumFragment extends Fragment implements PhotosInterf {
 //                    }
 //                }.execute();
 //                if (onPhotoClickBitmap != null){
-                    EventBus.getDefault().post(new GoToPhotoFragmentEvent(positionClick, listUrl,
+                    EventBus.getDefault().post(new GoToPhotoActivityEvent(positionClick, listUrl,
                             screenLocation, view.getWidth(), view.getHeight()));
 
 //                }

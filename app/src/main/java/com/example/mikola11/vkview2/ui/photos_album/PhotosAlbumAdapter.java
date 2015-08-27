@@ -2,8 +2,6 @@ package com.example.mikola11.vkview2.ui.photos_album;
 
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +10,15 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.api.entity.PhotoAlbum;
+import com.example.mikola11.vkview2.api.entity.PhotosAlbumResponseWrapper;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class PhotosAlbumAdapter extends BaseAdapter {
-    List<PhotoAlbum> photoAlbumList;
+    List<PhotosAlbumResponseWrapper.PhotoAlbum> photoAlbumList;
     private Context mContext;
 
-    public PhotosAlbumAdapter(Context context, List<PhotoAlbum> photoAlbumList) {
+    public PhotosAlbumAdapter(Context context, List<PhotosAlbumResponseWrapper.PhotoAlbum> photoAlbumList) {
         this.photoAlbumList = photoAlbumList;
         this.mContext = context;
     }

@@ -11,16 +11,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.api.entity.Friend;
+import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
 
 import java.util.List;
 
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder> {
 
-    private List<Friend> friendList;
+    private List<FriendsResponseWrapper.Friend> friendList;
     private Context mContext;
 
-    public FriendsListAdapter(Context context, List<Friend> friendList) {
+    public FriendsListAdapter(Context context, List<FriendsResponseWrapper.Friend> friendList) {
         this.friendList = friendList;
         this.mContext = context;
     }

@@ -1,8 +1,6 @@
 package com.example.mikola11.vkview2.ui.friends;
 
 import android.app.Activity;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.api.entity.Friend;
+import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.event.PutFriendsDataEvent;
 import com.example.mikola11.vkview2.event.RequestAlbumsDataEvent;
@@ -39,8 +37,8 @@ public class FriendsListFragment extends Fragment implements SearchInterf {
 
     private View v;
     private RecyclerView recyclerView;
-    private List<Friend> friendList = new ArrayList<Friend>();
-    private List<Friend> searchResultFriendList = new ArrayList<Friend>();
+    private List<FriendsResponseWrapper.Friend> friendList = new ArrayList<FriendsResponseWrapper.Friend>();
+    private List<FriendsResponseWrapper.Friend> searchResultFriendList = new ArrayList<FriendsResponseWrapper.Friend>();
     private FriendsListAdapter friendsListAdapter;
     private FriendsListAdapter searchResultFriendsListAdapter;
     private String searchResultMassage;
@@ -97,7 +95,7 @@ public class FriendsListFragment extends Fragment implements SearchInterf {
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((MainActivity) getActivity()).setSearchVisibility(true);
+        ((MainActivity) getActivity()).setSearchVisibilCompletedLoad(true);
         Log.d("NIKI", "Main toolbar show and visible search");
 
         recyclerView = (RecyclerView) v.findViewById(R.id.friendsListRecyclerView);
@@ -112,7 +110,7 @@ public class FriendsListFragment extends Fragment implements SearchInterf {
                         // TODO post album data into GoToAlbumsFragmentEvent
                         // and after into intent extras
 
-                        if (searchResultMassage != null){
+                        if (searchResultMassage != null) {
                             status = searchResultFriendList.get(position).getDeactivated();
                             titleToolbar = searchResultFriendList.get(position).getFullName();
                             idClickedFriend = searchResultFriendList.get(position).getId();
@@ -122,7 +120,7 @@ public class FriendsListFragment extends Fragment implements SearchInterf {
                             idClickedFriend = friendList.get(position).getId();
                         }
 
-                        if (status ==null){
+                        if (status == null) {
                             EventBus.getDefault().post(new GoToAlbumsFragmentEvent(titleToolbar));
                             EventBus.getDefault().post(new RequestAlbumsDataEvent(idClickedFriend));
                         } else {
