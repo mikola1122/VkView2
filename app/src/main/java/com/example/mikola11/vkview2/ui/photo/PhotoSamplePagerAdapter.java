@@ -16,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.SendBitmapPhotoToShareEvent;
 import com.example.mikola11.vkview2.utils.TouchImageView;
@@ -31,10 +33,12 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
     String[] photoUrl;
     Context mContext;
     Bitmap myResource;
+    int localPosition;
+
 
     public String urlSharePhoto;
-    public ImageView v;
-    public Bitmap theBitmap;
+    public TouchImageView v;
+    public Bitmap theBitmap = null;
     public static final String TAG_IMAGE_VIEW = "myPhotoImage";
     private final LayoutInflater mInflater;
 
@@ -57,7 +61,11 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View root = (ViewGroup) mInflater.inflate(R.layout.item_photo_frame, null);
+        View root = mInflater.inflate(R.layout.item_photo_frame, container, false);
+
+        container.addView(root, 0);
+
+
         root.setTag(TAG_IMAGE_VIEW + position);
 
         v = (TouchImageView) root.findViewById(R.id.image);
@@ -65,20 +73,24 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
         v.setScaleType(TouchImageView.ScaleType.FIT_CENTER);
 //        v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
 //                ViewGroup.LayoutParams.MATCH_PARENT));
-        final int localPosition = position;
-
-
-//        v.setImageBitmap(theBitmap);
-
-        Glide.with(mContext).load(photoUrl[position])
-                .asBitmap()
-                .fitCenter()
-                .into(v);
-
-
-        ((ViewPager) container).addView(root, 0);
-
+        localPosition = position;
         urlSharePhoto = photoUrl[position];
+
+        Glide.with(mContext)
+                .load(urlSharePhoto)
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                        v.setImageBitmap(bitmap);
+                    }
+                });
+
+
+//        Glide.with(mContext).load(photoUrl[position])
+//                .asBitmap()
+//                .fitCenter()
+//                .into(v);
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,15 +110,15 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
         // Extract Bitmap from ImageView drawable
         Drawable drawable = imageView.getDrawable();
         Bitmap bmp = null;
-        if (drawable instanceof BitmapDrawable){
-            bmp = ((BitmapDrawable)  imageView.getDrawable()).getBitmap();
+        if (drawable instanceof BitmapDrawable) {
+            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         } else {
             return null;
         }
         // Store image to default external storage directory
         Uri bmpUri = null;
         try {
-            File file =  new File(Environment.getExternalStoragePublicDirectory(
+            File file = new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".jpeg");
             file.getParentFile().mkdirs();
             FileOutputStream out = new FileOutputStream(file);
