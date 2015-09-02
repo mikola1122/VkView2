@@ -651,7 +651,7 @@ public class TouchImageView extends ImageView {
     }
 
     /**
-     * Set view dimensions based on layout params
+     * Set view dimensions based on drawer_header params
      *
      * @param mode
      * @param size

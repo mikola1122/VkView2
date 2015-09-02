@@ -150,11 +150,6 @@ public class PhotoActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-//                Log.d("NIKI", "onPageScrolled " + clickCounter);
-//                if (clickCounter){
-//                    clickCounter = !clickCounter;
-//                    getSupportActionBar().hide();
-//                }
             }
         });
 

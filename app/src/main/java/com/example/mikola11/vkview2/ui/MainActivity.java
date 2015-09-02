@@ -1,6 +1,7 @@
 package com.example.mikola11.vkview2.ui;
 
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
@@ -26,6 +31,15 @@ import com.example.mikola11.vkview2.ui.login.LoginFragment;
 import com.example.mikola11.vkview2.ui.photo.PhotoActivity;
 import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumFragment;
 import com.example.mikola11.vkview2.utils.TokenStorage;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.Badgeable;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 import de.greenrobot.event.EventBus;
 
@@ -48,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Toolbar toolbar;
     public MenuItem searchMenuItem;
+    private Drawer drawerResult = null;
     private String photosTitle;
     private Boolean visibilityBull;
     private Boolean isTablet;
@@ -66,10 +81,53 @@ public class MainActivity extends AppCompatActivity {
 
         initToolbar();
 
+        initNavigationDrawer();
+
         chooseStartFragment();
 
         FrameLayout fragment2 = (FrameLayout) findViewById(R.id.fragment2);
         isTablet = (fragment2 != null);
+    }
+
+    private void initNavigationDrawer() {
+        // Инициализируем Toolbar
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNavigationDrawer);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Инициализируем Navigation Drawer
+        drawerResult = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withTranslucentStatusBar(false)
+                .withActionBarDrawerToggle(false)
+                .withHeader(R.layout.drawer_header)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("home").withIcon(R.drawable.ic_share_white_24dp).withBadge("99").withIdentifier(1),
+                        new PrimaryDrawerItem().withName("free_play").withIcon(R.drawable.ic_share_white_24dp),
+                        new PrimaryDrawerItem().withName("custom").withIcon(R.drawable.ic_share_white_24dp).withBadge("6").withIdentifier(2),
+                        new SectionDrawerItem().withName("settings"),
+                        new SecondaryDrawerItem().withName("help").withIcon(R.drawable.ic_share_white_24dp),
+                        new SecondaryDrawerItem().withName("open_source").withIcon(R.drawable.ic_share_white_24dp),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName("contact").withIcon(R.drawable.ic_share_white_24dp).withBadge("12+").withIdentifier(1)
+                )
+                .withOnDrawerListener(new Drawer.OnDrawerListener() {
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        // Скрываем клавиатуру при открытии Navigation Drawer
+                        InputMethodManager inputMethodManager = (InputMethodManager) MainActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), 0);
+                    }
+
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                    }
+
+                    @Override
+                    public void onDrawerSlide(View view, float v) {
+                    }
+                }).build();
     }
 
     private void chooseStartFragment() {
@@ -125,9 +183,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void setSearchVisibilCompletedLoad(Boolean visiblBool) {
         visibilityBull = visiblBool;
-
         return;
     }
+
     public void setSearchVisibilityincompleteLoad(Boolean visiblBool) {
         searchMenuItem.setVisible(visiblBool);
         return;
@@ -154,13 +212,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStackImmediate();
-            return;
-        }
-        invalidateOptionsMenu();
-        super.onBackPressed();
 
+        // Закрываем Navigation Drawer по нажатию системной кнопки "Назад" если он открыт
+        if (drawerResult.isDrawerOpen()) {
+            drawerResult.closeDrawer();
+        } else {
+            if (getFragmentManager().getBackStackEntryCount() > 0) {
+                getFragmentManager().popBackStackImmediate();
+                return;
+            }
+            invalidateOptionsMenu();
+            super.onBackPressed();
+        }
     }
 
 
@@ -183,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment2, albumsFragment)
                     .commit();
-            Log.d("MIKI", "THIS IS TABLEEEET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Log.d("NIKI", "THIS IS TABLEEEET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         } else {
             invalidateOptionsMenu();
             getSupportFragmentManager().beginTransaction()
@@ -201,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         PhotosAlbumFragment photosFragment = new PhotosAlbumFragment();
         photosFragment.setArguments(bundle);
 
-        if (isTablet){
+        if (isTablet) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment2, photosFragment)
                     .addToBackStack(null)
