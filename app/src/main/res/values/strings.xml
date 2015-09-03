@@ -8,4 +8,14 @@
     <string name="share_title">Share photo</string>
     <string name="search_title">Search</string>
 
+    <string name="drawer_item_my_albums">My albums</string>
+    <string name="drawer_item_friends">Friends</string>
+    <string name="drawer_item_communities">Communities</string>
+    <string name="drawer_item_setting">Setting</string>
+    <string name="drawer_item_starting_page">Page after starting</string>
+    <string name="drawer_item_download">Folder for download</string>
+    <string name="drawer_item_languages">Languages</string>
+    <string name="drawer_item_help">Help &amp; feedback</string>
+    <string name="drawer_item_log_out">Log out</string>
+
 </resources>

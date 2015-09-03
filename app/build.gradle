@@ -31,4 +31,6 @@ dependencies {
         transitive = true
         exclude group: 'com.android.support'
     }
+    compile 'com.mikepenz:google-material-typeface:1.2.0.1@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
 }

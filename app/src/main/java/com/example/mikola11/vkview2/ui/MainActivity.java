@@ -15,9 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
@@ -37,9 +35,6 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.Badgeable;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 import de.greenrobot.event.EventBus;
 
@@ -103,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 .withActionBarDrawerToggle(false)
                 .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("home").withIcon(R.drawable.ic_share_white_24dp).withBadge("99").withIdentifier(1),
+                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_my_albums)).withIcon(R.drawable.ic_share_white_24dp).withBadge("99").withIdentifier(1),
                         new PrimaryDrawerItem().withName("free_play").withIcon(R.drawable.ic_share_white_24dp),
                         new PrimaryDrawerItem().withName("custom").withIcon(R.drawable.ic_share_white_24dp).withBadge("6").withIdentifier(2),
                         new SectionDrawerItem().withName("settings"),
