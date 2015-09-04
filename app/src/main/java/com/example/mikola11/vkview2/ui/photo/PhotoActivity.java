@@ -48,7 +48,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     private static final TimeInterpolator sDecelerator = new DecelerateInterpolator();
     private static final TimeInterpolator sAccelerator = new AccelerateInterpolator();
-    private static final int ANIM_DURATION = 500;
+    private static final int ANIM_DURATION = 350;
 
     private BitmapDrawable mBitmapDrawable;
     private ColorMatrix colorizerMatrix = new ColorMatrix();
@@ -139,6 +139,7 @@ public class PhotoActivity extends AppCompatActivity {
                 ViewGroup image = (ViewGroup) viewPager.findViewWithTag(PhotoSamplePagerAdapter
                         .TAG_IMAGE_VIEW + viewPager.getCurrentItem());
                 Log.d("SuperTag", "View "+image);
+//                ImageView image = (ImageView) image.getDisplay().getDisplayId(R.id.image);
 //                PhotoUri myPhotoUri = new PhotoUri();
 //                Uri uriPhoto = myPhotoUri.getLocalBitmapUri(image);
 //                intent = new Intent();

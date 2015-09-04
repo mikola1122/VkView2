@@ -15,7 +15,8 @@
     <string name="drawer_item_starting_page">Page after starting</string>
     <string name="drawer_item_download">Folder for download</string>
     <string name="drawer_item_languages">Languages</string>
-    <string name="drawer_item_help">Help &amp; feedback</string>
+    <string name="drawer_item_help">Help</string>
+    <string name="drawer_item_feedback">Feedback</string>
     <string name="drawer_item_log_out">Log out</string>
 
 </resources>

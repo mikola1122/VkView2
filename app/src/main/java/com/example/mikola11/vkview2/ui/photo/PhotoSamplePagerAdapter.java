@@ -37,7 +37,6 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
 
 
     public String urlSharePhoto;
-    public TouchImageView v;
     public Bitmap theBitmap = null;
     public static final String TAG_IMAGE_VIEW = "myPhotoImage";
     private final LayoutInflater mInflater;
@@ -63,12 +62,12 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View root = mInflater.inflate(R.layout.item_photo_frame, container, false);
 
-        container.addView(root, 0);
+        ((ViewPager) container).addView(root, 0);
 
 
         root.setTag(TAG_IMAGE_VIEW + position);
 
-        v = (TouchImageView) root.findViewById(R.id.image);
+        final TouchImageView v = (TouchImageView) root.findViewById(R.id.image);
         v.setPadding(0, 0, 0, 0);
         v.setScaleType(TouchImageView.ScaleType.FIT_CENTER);
 //        v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -87,10 +86,7 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
                 });
 
 
-//        Glide.with(mContext).load(photoUrl[position])
-//                .asBitmap()
-//                .fitCenter()
-//                .into(v);
+
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +129,6 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((FrameLayout) object);
+        ((ViewPager) container).removeView((FrameLayout) object);
     }
 }

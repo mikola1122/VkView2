@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -16,7 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
@@ -29,12 +34,19 @@ import com.example.mikola11.vkview2.ui.login.LoginFragment;
 import com.example.mikola11.vkview2.ui.photo.PhotoActivity;
 import com.example.mikola11.vkview2.ui.photos_album.PhotosAlbumFragment;
 import com.example.mikola11.vkview2.utils.TokenStorage;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 
 import de.greenrobot.event.EventBus;
 
@@ -86,26 +98,30 @@ public class MainActivity extends AppCompatActivity {
 
     private void initNavigationDrawer() {
         // Инициализируем Toolbar
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNavigationDrawer);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        AccountHeader headerResult = initAccountHeader();
 
         // Инициализируем Navigation Drawer
         drawerResult = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
+                .withAccountHeader(headerResult)
                 .withTranslucentStatusBar(false)
                 .withActionBarDrawerToggle(false)
-                .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_my_albums)).withIcon(R.drawable.ic_share_white_24dp).withBadge("99").withIdentifier(1),
-                        new PrimaryDrawerItem().withName("free_play").withIcon(R.drawable.ic_share_white_24dp),
-                        new PrimaryDrawerItem().withName("custom").withIcon(R.drawable.ic_share_white_24dp).withBadge("6").withIdentifier(2),
-                        new SectionDrawerItem().withName("settings"),
-                        new SecondaryDrawerItem().withName("help").withIcon(R.drawable.ic_share_white_24dp),
-                        new SecondaryDrawerItem().withName("open_source").withIcon(R.drawable.ic_share_white_24dp),
+                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_my_albums)).withIcon(GoogleMaterial.Icon.gmd_photo_album).withIdentifier(2),
+                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_friends)).withIcon(GoogleMaterial.Icon.gmd_person_outline).withIdentifier(2),
+                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_communities)).withIcon(GoogleMaterial.Icon.gmd_people_outline).withIdentifier(3),
+                        new SectionDrawerItem().withName(getString(R.string.drawer_item_setting)),
+                        new SecondaryDrawerItem().withName(getString(R.string.drawer_item_starting_page)).withIcon(GoogleMaterial.Icon.gmd_smartphone),
+                        new SecondaryDrawerItem().withName(getString(R.string.drawer_item_download)).withIcon(GoogleMaterial.Icon.gmd_file_download),
+                        new SecondaryDrawerItem().withName(getString(R.string.drawer_item_languages)).withIcon(GoogleMaterial.Icon.gmd_language),
                         new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName("contact").withIcon(R.drawable.ic_share_white_24dp).withBadge("12+").withIdentifier(1)
+                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_help)).withIcon(GoogleMaterial.Icon.gmd_help).withIdentifier(4),
+                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_feedback)).withIcon(GoogleMaterial.Icon.gmd_feedback).withIdentifier(5),
+                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_log_out)).withIcon(GoogleMaterial.Icon.gmd_power_settings_new).withIdentifier(6)
                 )
                 .withOnDrawerListener(new Drawer.OnDrawerListener() {
                     @Override
@@ -122,7 +138,50 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDrawerSlide(View view, float v) {
                     }
-                }).build();
+                })
+//                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+//                    @Override
+//                    public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
+//                        if (drawerResult.setSelection(1)){
+//
+//                        }
+//                        return true;
+//                    }
+//                })
+                .build();
+    }
+
+    private AccountHeader initAccountHeader() {
+        // Инициализируем Account Header
+
+        DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader() {
+            @Override
+            public void set(ImageView imageView, Uri uri, Drawable placeholder) {
+                Glide.with(imageView.getContext()).load(uri).placeholder(placeholder).into(imageView);
+            }
+
+            @Override
+            public void cancel(ImageView imageView) {
+                Glide.clear(imageView);
+            }
+
+            @Override
+            public Drawable placeholder(Context ctx) {
+                return null;
+            }
+        });
+
+        IProfile loginUser = new ProfileDrawerItem()
+                .withName("Rosryk Chornyi")
+                .withIcon("http://cs617317.vk.me/v617317913/fb75/Hn94rJVT0s8.jpg");
+
+        return new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.indeema)
+                .addProfiles(loginUser)
+                .build();
+
+
     }
 
     private void chooseStartFragment() {
@@ -194,16 +253,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                onBackPressed();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
@@ -212,11 +271,11 @@ public class MainActivity extends AppCompatActivity {
         if (drawerResult.isDrawerOpen()) {
             drawerResult.closeDrawer();
         } else {
-            if (getFragmentManager().getBackStackEntryCount() > 0) {
-                getFragmentManager().popBackStackImmediate();
-                return;
-            }
-            invalidateOptionsMenu();
+//            if (getFragmentManager().getBackStackEntryCount() > 0) {
+//                getFragmentManager().popBackStackImmediate();
+//                return;
+//            }
+//            invalidateOptionsMenu();
             super.onBackPressed();
         }
     }
@@ -250,6 +309,9 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
+        // Скрываем клавиатуру при открытии Navigation Drawer
+        InputMethodManager inputMethodManager = (InputMethodManager) MainActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), 0);
     }
 
     public void onEvent(GoToPhotosAlbumFragmentEvent event) {
