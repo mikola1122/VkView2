@@ -136,9 +136,9 @@ public class PhotoActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 // todo  setShareIntent();
 //                ImageView image = (ImageView) viewPager.getFocusedChild();
-                ViewGroup image = (ViewGroup) viewPager.findViewWithTag(PhotoSamplePagerAdapter
-                        .TAG_IMAGE_VIEW + viewPager.getCurrentItem());
-                Log.d("SuperTag", "View "+image);
+//                ViewGroup image = (ViewGroup) viewPager.findViewWithTag(PhotoSamplePagerAdapter
+//                        .TAG_IMAGE_VIEW + viewPager.getCurrentItem());
+//                Log.d("SuperTag", "View "+image);
 //                ImageView image = (ImageView) image.getDisplay().getDisplayId(R.id.image);
 //                PhotoUri myPhotoUri = new PhotoUri();
 //                Uri uriPhoto = myPhotoUri.getLocalBitmapUri(image);

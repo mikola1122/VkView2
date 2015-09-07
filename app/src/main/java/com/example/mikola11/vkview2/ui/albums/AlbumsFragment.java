@@ -59,7 +59,7 @@ public class AlbumsFragment extends Fragment implements AlbumInterf {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).setSearchVisibilityincompleteLoad(false);
+        ((MainActivity) getActivity()).setSearchVisibilityIncompleteLoad(false);
 
     }
 

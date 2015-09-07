@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,10 +22,12 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
+import com.example.mikola11.vkview2.event.GetUserData;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.event.GoToPhotoActivityEvent;
 import com.example.mikola11.vkview2.event.GoToPhotosAlbumFragmentEvent;
+import com.example.mikola11.vkview2.event.PutUserDataEvent;
 import com.example.mikola11.vkview2.event.SendSearchFriendEvent;
 import com.example.mikola11.vkview2.ui.albums.AlbumsFragment;
 import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
@@ -44,7 +45,6 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 
@@ -69,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
 
     public Toolbar toolbar;
     public MenuItem searchMenuItem;
+    private String userFullName = null;
+    private String userPhotoLink = null;
+    private String userStatus = null;
     private Drawer drawerResult = null;
     private String photosTitle;
     private Boolean visibilityBull;
@@ -88,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
         initToolbar();
 
-        initNavigationDrawer();
 
         chooseStartFragment();
 
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private void initNavigationDrawer() {
         // Инициализируем Toolbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         AccountHeader headerResult = initAccountHeader();
 
@@ -157,7 +159,8 @@ public class MainActivity extends AppCompatActivity {
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader() {
             @Override
             public void set(ImageView imageView, Uri uri, Drawable placeholder) {
-                Glide.with(imageView.getContext()).load(uri).placeholder(placeholder).into(imageView);
+                Glide.with(imageView.getContext()).load(uri).placeholder(placeholder)
+                        .into(imageView);
             }
 
             @Override
@@ -172,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         IProfile loginUser = new ProfileDrawerItem()
-                .withName("Rosryk Chornyi")
-                .withIcon("http://cs617317.vk.me/v617317913/fb75/Hn94rJVT0s8.jpg");
+                .withName(userFullName)
+                .withIcon(userPhotoLink);
 
         return new AccountHeaderBuilder()
                 .withActivity(this)
@@ -193,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment1, new LoginFragment()).commit();
         } else {
+            EventBus.getDefault().post(new GetUserData());
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment1, new FriendsListFragment()).commit();
         }
@@ -240,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         return;
     }
 
-    public void setSearchVisibilityincompleteLoad(Boolean visiblBool) {
+    public void setSearchVisibilityIncompleteLoad(Boolean visiblBool) {
         searchMenuItem.setVisible(visiblBool);
         return;
     }
@@ -280,6 +284,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void onEvent(PutUserDataEvent event){
+        userFullName = event.massageUserFullName;
+        userStatus = event.massageUserStatus;
+        userPhotoLink = event.massageUserPhotoLink;
+
+        initNavigationDrawer();
+    }
 
     public void onEvent(GoToFriendsListEvent event) {
         invalidateOptionsMenu();

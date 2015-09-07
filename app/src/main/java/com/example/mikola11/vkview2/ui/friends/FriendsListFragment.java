@@ -94,7 +94,7 @@ public class FriendsListFragment extends Fragment implements SearchInterf {
 
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((MainActivity) getActivity()).setSearchVisibilCompletedLoad(true);
         Log.d("NIKI", "Main toolbar show and visible search");
 
