@@ -9,7 +9,7 @@ import com.example.mikola11.vkview2.api.entity.AlbumsResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.PhotosAlbumResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.UserResponseWrapper;
-import com.example.mikola11.vkview2.event.GetUserData;
+import com.example.mikola11.vkview2.event.GetUserDataEvent;
 import com.example.mikola11.vkview2.event.PutAlbumsDataEvent;
 import com.example.mikola11.vkview2.event.PutFriendsDataEvent;
 import com.example.mikola11.vkview2.event.PutPhotosAlbumDataEvent;
@@ -19,9 +19,7 @@ import com.example.mikola11.vkview2.event.RequestFriendsDataEvent;
 import com.example.mikola11.vkview2.event.RequestPhotosAlbumDataEvent;
 import com.example.mikola11.vkview2.utils.TokenStorage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
@@ -41,12 +39,12 @@ public class MyApplication extends Application {
         super.onCreate();
     }
 
-    public void onEventAsync(GetUserData event){
+    public void onEventAsync(GetUserDataEvent event){
         String accessToken = TokenStorage.getAccesTokenPref(this);
 
         Log.d("NIKI", "Send request user data for navigation drawer");
         Map<String, String> parametersUser= new HashMap<>();
-        parametersUser.put("fields","photo_100");
+        parametersUser.put("fields","photo_100,status");
         parametersUser.put("access_token", accessToken);
         parametersUser.put("v", "5.34");
         UserResponseWrapper responseU = api.getUserData(parametersUser);

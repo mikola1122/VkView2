@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.example.mikola11.vkview2.event.GetUserData;
 import com.example.mikola11.vkview2.utils.TokenStorage;
 import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.R;
@@ -37,8 +36,6 @@ public class LoginFragment extends Fragment implements LoginInterf {
         View v = inflater.inflate(R.layout.fragment_login, null);
 
         ((MainActivity) getActivity()).getSupportActionBar().hide();
-//        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((MainActivity) getActivity()).setSearchVisibilCompletedLoad(false);
         Log.d("NIKI", "Main toolbar not show");
 
         myWebView = (WebView) v.findViewById(R.id.webView);
@@ -74,7 +71,6 @@ public class LoginFragment extends Fragment implements LoginInterf {
                     Log.d(LOG, "token = " + accessToken);
                     Log.d(LOG, "ID = " + userId);
 
-                    EventBus.getDefault().post(new GetUserData());
                     EventBus.getDefault().post(new GoToFriendsListEvent());
 
                     return true;

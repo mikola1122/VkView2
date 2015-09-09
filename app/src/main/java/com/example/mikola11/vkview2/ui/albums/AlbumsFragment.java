@@ -73,8 +73,8 @@ public class AlbumsFragment extends Fragment implements AlbumInterf {
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(this.getArguments()
                 .getString(MainActivity.KEY_TITLE));
-        ((MainActivity) getActivity()).setSearchVisibilCompletedLoad(false);
-        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((MainActivity) getActivity()).setSearchVisibilityCompletedLoad(false);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         Log.d("NIKI", "Main toolbar show, but search item not visible");
 
         gridView = (GridView) v.findViewById(R.id.albumsGridView);

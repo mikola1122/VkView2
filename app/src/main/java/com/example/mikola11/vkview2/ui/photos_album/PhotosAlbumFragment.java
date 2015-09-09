@@ -61,8 +61,7 @@ public class PhotosAlbumFragment extends Fragment implements PhotosInterf {
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(this.getArguments().getString("PhotosTitle"));
-        ((MainActivity) getActivity()).setSearchVisibilCompletedLoad(false);
-        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((MainActivity) getActivity()).setSearchVisibilityCompletedLoad(false);
         Log.d("NIKI", "Main toolbar show, but search item not visible (PhotoToolbar)");
 
         gridView = (GridView) v.findViewById(R.id.photoAlbumGridView);

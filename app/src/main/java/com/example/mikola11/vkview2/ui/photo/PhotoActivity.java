@@ -27,6 +27,7 @@ import android.widget.ImageView;
 
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.SendBitmapPhotoToShareEvent;
+import com.example.mikola11.vkview2.utils.TouchImageView;
 
 import de.greenrobot.event.EventBus;
 
@@ -45,6 +46,7 @@ public class PhotoActivity extends AppCompatActivity {
     private MyShareActionProvider mShareActionProvider;
     Intent intent;
     public boolean clickCounter = false;
+    private PhotoUri myPhotoUri = null;
 
     private static final TimeInterpolator sDecelerator = new DecelerateInterpolator();
     private static final TimeInterpolator sAccelerator = new AccelerateInterpolator();
@@ -98,6 +100,7 @@ public class PhotoActivity extends AppCompatActivity {
         photoPagerAdapter = new PhotoSamplePagerAdapter(photoUrlArray, this);
         viewPager.setAdapter(photoPagerAdapter);
         viewPager.setCurrentItem(positionClick);
+        viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
         mBackground = new ColorDrawable(Color.BLACK);
         mTopLevelLayout.setBackground(mBackground);
@@ -136,17 +139,18 @@ public class PhotoActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 // todo  setShareIntent();
 //                ImageView image = (ImageView) viewPager.getFocusedChild();
-//                ViewGroup image = (ViewGroup) viewPager.findViewWithTag(PhotoSamplePagerAdapter
-//                        .TAG_IMAGE_VIEW + viewPager.getCurrentItem());
-//                Log.d("SuperTag", "View "+image);
-//                ImageView image = (ImageView) image.getDisplay().getDisplayId(R.id.image);
+                ViewGroup imageConteiner = (ViewGroup) viewPager.findViewWithTag(PhotoSamplePagerAdapter
+                        .TAG_IMAGE_VIEW + viewPager.getCurrentItem());
+                Log.d("SuperTag", "View "+imageConteiner);
+                TouchImageView image = (TouchImageView) imageConteiner.findViewById(R.id.image);
 //                PhotoUri myPhotoUri = new PhotoUri();
-//                Uri uriPhoto = myPhotoUri.getLocalBitmapUri(image);
-//                intent = new Intent();
-//                intent.setAction(Intent.ACTION_SEND);
-//                intent.setType("image/*");
-//                intent.putExtra(Intent.EXTRA_STREAM, uriPhoto);
-//                setShareIntent(intent);
+                myPhotoUri = new PhotoUri();
+                Uri uriPhoto = myPhotoUri.getLocalBitmapUri(image);
+                intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_STREAM, uriPhoto);
+                setShareIntent(intent);
             }
 
             @Override

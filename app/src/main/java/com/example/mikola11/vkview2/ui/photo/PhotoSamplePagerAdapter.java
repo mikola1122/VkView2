@@ -78,6 +78,7 @@ public class PhotoSamplePagerAdapter extends PagerAdapter {
         Glide.with(mContext)
                 .load(urlSharePhoto)
                 .asBitmap()
+                .placeholder(R.drawable.vk_image_loaded)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {

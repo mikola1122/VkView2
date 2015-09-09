@@ -13,7 +13,7 @@ import retrofit.http.QueryMap;
 
 public interface Api {
 
-    @GET("/method/friends.get")
+    @GET("/method/users.get")
     UserResponseWrapper getUserData(@QueryMap Map<String, String> parametersUser);
 
     @GET("/method/friends.get")

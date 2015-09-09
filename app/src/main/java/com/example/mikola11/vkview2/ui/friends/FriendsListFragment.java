@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
+import com.example.mikola11.vkview2.event.GetUserDataEvent;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.event.PutFriendsDataEvent;
 import com.example.mikola11.vkview2.event.RequestAlbumsDataEvent;
@@ -51,6 +52,7 @@ public class FriendsListFragment extends Fragment implements SearchInterf {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         EventBus.getDefault().post(new RequestFriendsDataEvent());
+        EventBus.getDefault().post(new GetUserDataEvent());
         super.onCreate(savedInstanceState);
     }
 
@@ -94,8 +96,8 @@ public class FriendsListFragment extends Fragment implements SearchInterf {
 
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((MainActivity) getActivity()).setSearchVisibilCompletedLoad(true);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((MainActivity) getActivity()).setSearchVisibilityCompletedLoad(true);
         Log.d("NIKI", "Main toolbar show and visible search");
 
         recyclerView = (RecyclerView) v.findViewById(R.id.friendsListRecyclerView);

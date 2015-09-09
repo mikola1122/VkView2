@@ -1,28 +1,34 @@
 package com.example.mikola11.vkview2.ui;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mikola11.vkview2.R;
-import com.example.mikola11.vkview2.event.GetUserData;
 import com.example.mikola11.vkview2.event.GoToAlbumsFragmentEvent;
 import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.event.GoToPhotoActivityEvent;
@@ -45,6 +51,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 
@@ -90,17 +97,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initToolbar();
-
-
         chooseStartFragment();
-
         FrameLayout fragment2 = (FrameLayout) findViewById(R.id.fragment2);
         isTablet = (fragment2 != null);
     }
 
     private void initNavigationDrawer() {
         // Инициализируем Toolbar
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         AccountHeader headerResult = initAccountHeader();
@@ -113,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 .withTranslucentStatusBar(false)
                 .withActionBarDrawerToggle(false)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_my_albums)).withIcon(GoogleMaterial.Icon.gmd_photo_album).withIdentifier(2),
+                        new PrimaryDrawerItem().withName(getString(R.string.drawer_item_my_albums)).withIcon(GoogleMaterial.Icon.gmd_photo_album).withIdentifier(1),
                         new PrimaryDrawerItem().withName(getString(R.string.drawer_item_friends)).withIcon(GoogleMaterial.Icon.gmd_person_outline).withIdentifier(2),
                         new PrimaryDrawerItem().withName(getString(R.string.drawer_item_communities)).withIcon(GoogleMaterial.Icon.gmd_people_outline).withIdentifier(3),
                         new SectionDrawerItem().withName(getString(R.string.drawer_item_setting)),
@@ -141,16 +145,62 @@ public class MainActivity extends AppCompatActivity {
                     public void onDrawerSlide(View view, float v) {
                     }
                 })
-//                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-//                    @Override
-//                    public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
-//                        if (drawerResult.setSelection(1)){
-//
-//                        }
-//                        return true;
-//                    }
-//                })
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @TargetApi(Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
+                        switch (i) {
+                            case 1:
+                                clickNavigationDrawerItem("First");
+                                break;
+                            case 2:
+                                clickNavigationDrawerItem("Second");
+                                break;
+                            case 3:
+                                clickNavigationDrawerItem("Third");
+                                break;
+                            case 11:
+//                                TokenStorage.setAccesTokenPref(getApplicationContext(), DEFAULT_PREF_TOKEN);
+//                                TokenStorage.setUserIdPref(getApplicationContext(), 0);
+                                TokenStorage.logOut(getApplicationContext());
+
+                                CookieSyncManager.createInstance(getApplicationContext());
+                                CookieManager cookieManager = CookieManager.getInstance();
+
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    cookieManager.removeAllCookies(null);
+                                }
+                                else {
+                                    cookieManager.removeAllCookie();
+                                }
+
+                                getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                                invalidateOptionsMenu();
+                                getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.fragment1, new LoginFragment()).commit();
+//                                Log.d("NIKI",TokenStorage.getAccesTokenPref(getApplicationContext()));
+                                break;
+                            default:
+                                clickNavigationDrawerItem("Other");
+                                break;
+                        }
+                        return false;
+
+                    }
+                })
                 .build();
+    }
+
+    private void clickNavigationDrawerItem(String itemName) {
+        Toast toast = Toast.makeText(MainActivity.this,
+                itemName + " Item Selected",
+                Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.getView().setBackgroundColor(getResources().getColor(R.color
+                .colorStartBackgroundTranslucentToolbar));
+        toast.show();
+        return;
     }
 
     private AccountHeader initAccountHeader() {
@@ -174,8 +224,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         IProfile loginUser = new ProfileDrawerItem()
                 .withName(userFullName)
+                .withEmail(userStatus)
                 .withIcon(userPhotoLink);
 
         return new AccountHeaderBuilder()
@@ -196,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment1, new LoginFragment()).commit();
         } else {
-            EventBus.getDefault().post(new GetUserData());
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment1, new FriendsListFragment()).commit();
         }
@@ -209,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbarMain);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().hide();
         }
     }
@@ -239,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void setSearchVisibilCompletedLoad(Boolean visiblBool) {
+    public void setSearchVisibilityCompletedLoad(Boolean visiblBool) {
         visibilityBull = visiblBool;
         return;
     }
@@ -271,26 +323,40 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+
         // Закрываем Navigation Drawer по нажатию системной кнопки "Назад" если он открыт
         if (drawerResult.isDrawerOpen()) {
             drawerResult.closeDrawer();
         } else {
-//            if (getFragmentManager().getBackStackEntryCount() > 0) {
-//                getFragmentManager().popBackStackImmediate();
-//                return;
-//            }
-//            invalidateOptionsMenu();
+            if (getFragmentManager().getBackStackEntryCount() > 0) {
+                getFragmentManager().popBackStackImmediate();
+                return;
+            }
+            invalidateOptionsMenu();
             super.onBackPressed();
         }
+
+
     }
 
-    public void onEvent(PutUserDataEvent event){
+    public void onEvent(PutUserDataEvent event) {
         userFullName = event.massageUserFullName;
         userStatus = event.massageUserStatus;
         userPhotoLink = event.massageUserPhotoLink;
-
-        initNavigationDrawer();
+        new Thread() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initNavigationDrawer();
+                    }
+                });
+            }
+        }.start();
+        return;
     }
+
 
     public void onEvent(GoToFriendsListEvent event) {
         invalidateOptionsMenu();
@@ -320,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        // Скрываем клавиатуру при открытии Navigation Drawer
+        // Скрываем клавиатуру при открытии AlbumFragment
         InputMethodManager inputMethodManager = (InputMethodManager) MainActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), 0);
     }

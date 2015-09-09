@@ -12,10 +12,7 @@ public class TokenStorage {
 
 
     public static SharedPreferences getPrefs(Context context) {
-
-
         return PreferenceManager.getDefaultSharedPreferences(context);
-
     }
     public static String getAccesTokenPref(Context context) {
 
@@ -33,5 +30,9 @@ public class TokenStorage {
 
     public static void setUserIdPref(Context context, int value) {
         getPrefs(context).edit().putInt(NAME_PREF_ID, value).apply();
+    }
+
+    public static void logOut(Context context){
+        getPrefs(context).edit().clear().apply();
     }
 }
