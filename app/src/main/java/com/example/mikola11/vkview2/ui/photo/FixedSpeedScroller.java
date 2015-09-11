@@ -6,7 +6,7 @@ import android.widget.Scroller;
 
 public class FixedSpeedScroller extends Scroller {
 
-    private int mDuration = 5000;
+    private int mDuration = 1000;
 
     public FixedSpeedScroller(Context context) {
         super(context);
