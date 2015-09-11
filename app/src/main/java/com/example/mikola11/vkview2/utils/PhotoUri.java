@@ -1,5 +1,7 @@
 package com.example.mikola11.vkview2.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -49,9 +51,11 @@ public class PhotoUri {
         return file;
     }
 
-    public void cleanSharedPhoto(List<Uri> sharedPhotoUri) {
+    public void cleanSharedPhoto(Context context, List<Uri> sharedPhotoUri) {
         for (int i = 0; i < sharedPhotoUri.size(); i++) {
-            (new File(String.valueOf(sharedPhotoUri.get(i)))).delete();
+            (new File(sharedPhotoUri.get(i).getPath())).delete();
+//            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(
+//                    new File(sharedPhotoUri.get(i).getPath()))));
         }
         return;
     }
