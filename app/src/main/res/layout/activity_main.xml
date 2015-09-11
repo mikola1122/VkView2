@@ -6,7 +6,6 @@
     tools:context=".MainActivity">
 
 
-
     <include
         android:id="@+id/toolbarMain"
         layout="@layout/toolbar_main" />
@@ -14,18 +13,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbarMain"
-        android:paddingTop="@dimen/image_horizontal_margin"
-        android:paddingBottom="@dimen/image_horizontal_margin"
-        android:paddingLeft="@dimen/image_vertical_margin"
-        android:paddingRight="@dimen/image_vertical_margin">
+        android:layout_below="@+id/toolbarMain">
 
         <FrameLayout
             android:id="@+id/fragment1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
 
         </FrameLayout>
     </RelativeLayout>

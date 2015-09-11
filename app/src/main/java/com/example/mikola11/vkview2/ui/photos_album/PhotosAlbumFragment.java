@@ -90,34 +90,9 @@ public class PhotosAlbumFragment extends Fragment implements PhotosInterf {
                         listUrl[i] = photoAlbumList.get(i).getPhoto_130();
                     }
                 }
-//                new AsyncTask<Void, Void, Void>(){
-//                    @Override
-//                    protected Void doInBackground(Void... params) {
-//                        Looper.prepare();
-//                        try {
-//                            onPhotoClickBitmap = Glide
-//                                    .with(getActivity())
-//                                    .load(listUrl[positionClick])
-//                                    .asBitmap()
-//                                    .into(20,20)
-//                                    .get();
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        } catch (ExecutionException e) {
-//                            e.printStackTrace();
-//                        }
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    protected void onPostExecute(Void aVoid) {
-//                    }
-//                }.execute();
-//                if (onPhotoClickBitmap != null){
                     EventBus.getDefault().post(new GoToPhotoActivityEvent(positionClick, listUrl,
                             screenLocation, view.getWidth(), view.getHeight()));
 
-//                }
             }
         });
 

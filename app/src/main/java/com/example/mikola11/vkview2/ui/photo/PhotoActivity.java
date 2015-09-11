@@ -9,7 +9,6 @@ import android.graphics.ColorMatrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -22,12 +21,17 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.example.mikola11.vkview2.R;
 import com.example.mikola11.vkview2.event.SendBitmapPhotoToShareEvent;
+import com.example.mikola11.vkview2.utils.PhotoUri;
 import com.example.mikola11.vkview2.utils.TouchImageView;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -45,8 +49,9 @@ public class PhotoActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private MyShareActionProvider mShareActionProvider;
     Intent intent;
+    private List<Uri> sharedPhoroUri = new ArrayList<Uri>();
     public boolean clickCounter = false;
-    private PhotoUri myPhotoUri = null;
+
 
     private static final TimeInterpolator sDecelerator = new DecelerateInterpolator();
     private static final TimeInterpolator sAccelerator = new AccelerateInterpolator();
@@ -100,6 +105,18 @@ public class PhotoActivity extends AppCompatActivity {
         photoPagerAdapter = new PhotoSamplePagerAdapter(photoUrlArray, this);
         viewPager.setAdapter(photoPagerAdapter);
         viewPager.setCurrentItem(positionClick);
+        try {
+            Field mScroller;
+            mScroller = ViewPager.class.getDeclaredField("mScroller");
+            mScroller.setAccessible(true);
+            Interpolator sInterpolator = new AccelerateInterpolator();
+            FixedSpeedScroller scroller = new FixedSpeedScroller(viewPager.getContext(), sInterpolator);
+            // scroller.setFixedDuration(5000);
+            mScroller.set(viewPager, scroller);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        }
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
         mBackground = new ColorDrawable(Color.BLACK);
@@ -137,19 +154,18 @@ public class PhotoActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                // todo  setShareIntent();
-//                ImageView image = (ImageView) viewPager.getFocusedChild();
                 ViewGroup imageConteiner = (ViewGroup) viewPager.findViewWithTag(PhotoSamplePagerAdapter
                         .TAG_IMAGE_VIEW + viewPager.getCurrentItem());
-                Log.d("SuperTag", "View "+imageConteiner);
                 TouchImageView image = (TouchImageView) imageConteiner.findViewById(R.id.image);
-//                PhotoUri myPhotoUri = new PhotoUri();
-                myPhotoUri = new PhotoUri();
-                Uri uriPhoto = myPhotoUri.getLocalBitmapUri(image);
+                PhotoUri photoUri = new PhotoUri();
+                Uri uri = photoUri.getLocalBitmapUri(image);
+                Log.d("NIKI", "PhotoActivity.onPageSelected uri = " + uri);
+                sharedPhoroUri.add(uri);
+
                 intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
                 intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_STREAM, uriPhoto);
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
                 setShareIntent(intent);
             }
 
@@ -251,6 +267,7 @@ public class PhotoActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+//        (new PhotoUri()).cleanSharedPhoto(sharedPhoroUri);
         super.onDestroy();
     }
 
@@ -258,6 +275,8 @@ public class PhotoActivity extends AppCompatActivity {
         if (event.massage == null) {
             Log.e("NIKI", "bitmap photo is empty");
         } else {
+            sharedPhoroUri.add(event.massage);
+
             intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("image/*");

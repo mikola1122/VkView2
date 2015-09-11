@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -83,23 +84,22 @@ public class MainActivity extends AppCompatActivity {
     private String photosTitle;
     private Boolean visibilityBull;
     private Boolean isTablet;
+    private FrameLayout fragment2 = null;
 
     @Override
     protected void onStart() {
         EventBus.getDefault().register(this);
         super.onStart();
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initToolbar();
-        chooseStartFragment();
-        FrameLayout fragment2 = (FrameLayout) findViewById(R.id.fragment2);
+        fragment2 = (FrameLayout) findViewById(R.id.fragment2);
         isTablet = (fragment2 != null);
+        chooseStartFragment();
     }
 
     private void initNavigationDrawer() {
@@ -160,26 +160,33 @@ public class MainActivity extends AppCompatActivity {
                                 clickNavigationDrawerItem("Third");
                                 break;
                             case 11:
-//                                TokenStorage.setAccesTokenPref(getApplicationContext(), DEFAULT_PREF_TOKEN);
-//                                TokenStorage.setUserIdPref(getApplicationContext(), 0);
+                                //clear tablet container
+                                if (isTablet) {
+                                    fragment2.removeAllViews();
+                                }
+                                //clear navigation drawer
+                                DrawerLayout drawerLayout = drawerResult.getDrawerLayout();
+                                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                                //clear access_token in sharePreferences file
                                 TokenStorage.logOut(getApplicationContext());
-
+                                //clear cookie
                                 CookieSyncManager.createInstance(getApplicationContext());
                                 CookieManager cookieManager = CookieManager.getInstance();
-
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     cookieManager.removeAllCookies(null);
-                                }
-                                else {
+                                } else {
                                     cookieManager.removeAllCookie();
                                 }
-
+                                //clear backStack
                                 getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
+                                //starting login fragment
                                 invalidateOptionsMenu();
+                                Bundle bundleLogin = new Bundle();
+                                bundleLogin.putBoolean(KEY_TABLET, isTablet);
+                                LoginFragment loginFragment = new LoginFragment();
+                                loginFragment.setArguments(bundleLogin);
                                 getSupportFragmentManager().beginTransaction()
-                                        .add(R.id.fragment1, new LoginFragment()).commit();
-//                                Log.d("NIKI",TokenStorage.getAccesTokenPref(getApplicationContext()));
+                                        .replace(R.id.fragment1, loginFragment).commit();
                                 break;
                             default:
                                 clickNavigationDrawerItem("Other");
@@ -244,9 +251,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (storedToken.equals(DEFAULT_PREF_TOKEN)) {
-            invalidateOptionsMenu();
+
+            Bundle bundleLogin = new Bundle();
+            bundleLogin.putBoolean(KEY_TABLET, isTablet);
+            LoginFragment loginFragment = new LoginFragment();
+            loginFragment.setArguments(bundleLogin);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment1, new LoginFragment()).commit();
+                    .add(R.id.fragment1, loginFragment).commit();
         } else {
 
             getSupportFragmentManager().beginTransaction()
