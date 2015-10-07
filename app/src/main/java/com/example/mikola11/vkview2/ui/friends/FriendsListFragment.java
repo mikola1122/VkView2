@@ -51,7 +51,6 @@ public class FriendsListFragment extends Fragment implements SearchInterf {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        EventBus.getDefault().post(new RequestFriendsDataEvent());
         EventBus.getDefault().post(new GetUserDataEvent());
         super.onCreate(savedInstanceState);
     }

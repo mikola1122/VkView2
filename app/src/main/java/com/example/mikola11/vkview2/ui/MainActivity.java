@@ -35,6 +35,9 @@ import com.example.mikola11.vkview2.event.GoToFriendsListEvent;
 import com.example.mikola11.vkview2.event.GoToPhotoActivityEvent;
 import com.example.mikola11.vkview2.event.GoToPhotosAlbumFragmentEvent;
 import com.example.mikola11.vkview2.event.PutUserDataEvent;
+import com.example.mikola11.vkview2.event.RequestAlbumsDataEvent;
+import com.example.mikola11.vkview2.event.RequestCommunitiesDataEvent;
+import com.example.mikola11.vkview2.event.RequestFriendsDataEvent;
 import com.example.mikola11.vkview2.event.SendSearchFriendEvent;
 import com.example.mikola11.vkview2.ui.albums.AlbumsFragment;
 import com.example.mikola11.vkview2.ui.friends.FriendsListFragment;
@@ -149,15 +152,26 @@ public class MainActivity extends AppCompatActivity {
                     @TargetApi(Build.VERSION_CODES.KITKAT)
                     @Override
                     public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
+                        //clear backStack
+                        getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         switch (i) {
                             case 1:
-                                clickNavigationDrawerItem("First");
+                                //clear backStack
+                                getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                EventBus.getDefault().post(new GoToAlbumsFragmentEvent(
+                                        getString(R.string.drawer_item_my_albums)));
+                                EventBus.getDefault().post(new RequestAlbumsDataEvent(TokenStorage
+                                        .getUserIdPref(getApplicationContext())));
                                 break;
                             case 2:
-                                clickNavigationDrawerItem("Second");
+                                //clear backStack
+                                getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                EventBus.getDefault().post(new GoToFriendsListEvent(true));
                                 break;
                             case 3:
-                                clickNavigationDrawerItem("Third");
+                                //clear backStack
+                                getFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                EventBus.getDefault().post(new GoToFriendsListEvent(false));
                                 break;
                             case 11:
                                 //clear tablet container
@@ -231,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         IProfile loginUser = new ProfileDrawerItem()
                 .withName(userFullName)
                 .withEmail(userStatus)
@@ -242,8 +255,6 @@ public class MainActivity extends AppCompatActivity {
                 .withHeaderBackground(R.drawable.indeema)
                 .addProfiles(loginUser)
                 .build();
-
-
     }
 
     private void chooseStartFragment() {
@@ -262,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment1, new FriendsListFragment()).commit();
+            EventBus.getDefault().post(new RequestFriendsDataEvent());
         }
 
         Log.d(LOG, this.getLocalClassName() + " access_token = " + storedToken);
@@ -371,6 +383,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onEvent(GoToFriendsListEvent event) {
         invalidateOptionsMenu();
+        if (event.massage) {
+            EventBus.getDefault().post(new RequestFriendsDataEvent());
+        } else {
+            EventBus.getDefault().post(new RequestCommunitiesDataEvent());
+        }
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment1, new FriendsListFragment())
                 .commit();

@@ -9,7 +9,6 @@ public class FriendsResponseWrapper {
     public FriendsResponse getResponse() {
         return response;
     }
-
     public void setResponse(FriendsResponse response) {
         this.response = response;
     }

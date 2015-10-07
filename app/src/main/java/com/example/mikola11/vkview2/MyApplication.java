@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.mikola11.vkview2.api.Api;
 import com.example.mikola11.vkview2.api.entity.AlbumsResponseWrapper;
+import com.example.mikola11.vkview2.api.entity.CommunitiesResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.FriendsResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.PhotosAlbumResponseWrapper;
 import com.example.mikola11.vkview2.api.entity.UserResponseWrapper;
@@ -15,11 +16,14 @@ import com.example.mikola11.vkview2.event.PutFriendsDataEvent;
 import com.example.mikola11.vkview2.event.PutPhotosAlbumDataEvent;
 import com.example.mikola11.vkview2.event.PutUserDataEvent;
 import com.example.mikola11.vkview2.event.RequestAlbumsDataEvent;
+import com.example.mikola11.vkview2.event.RequestCommunitiesDataEvent;
 import com.example.mikola11.vkview2.event.RequestFriendsDataEvent;
 import com.example.mikola11.vkview2.event.RequestPhotosAlbumDataEvent;
 import com.example.mikola11.vkview2.utils.TokenStorage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
@@ -66,8 +70,30 @@ public class MyApplication extends Application {
         parametersFriends.put("access_token", accessToken);
         FriendsResponseWrapper responseF = api.getFriendsData(parametersFriends);
 
-
         EventBus.getDefault().post(new PutFriendsDataEvent(responseF.getResponse().getItems()));
+    }
+
+    public void onEventAsync(RequestCommunitiesDataEvent event){
+        int userId = TokenStorage.getUserIdPref(this);
+
+        Log.d("NIKI", "Send request communities");
+        Map<String, String> parametersCommunities = new HashMap<>();
+        parametersCommunities.put("user_id", String.valueOf(userId));
+        parametersCommunities.put("extended", "1");
+        parametersCommunities.put("v", "5.34");
+        CommunitiesResponseWrapper responseC = api.getCommunitiesData(parametersCommunities);
+        List<CommunitiesResponseWrapper.Communities> communities = new ArrayList<CommunitiesResponseWrapper.Communities>();
+        communities.addAll(responseC.getResponse().getItems());
+        List<FriendsResponseWrapper.Friend> friends = new ArrayList<FriendsResponseWrapper.Friend>();
+        FriendsResponseWrapper.Friend group = new FriendsResponseWrapper.Friend();
+        for (int i=0; i<responseC.getResponse().getCount()-1; i++){
+            group.setId(-communities.get(i).getId());
+            group.setFirst_name(null);
+            group.setLast_name(communities.get(i).getName());
+            group.setPhoto_100(communities.get(i).getPhoto_100());
+            friends.add(i, group);
+        }
+        EventBus.getDefault().post(new PutFriendsDataEvent(friends));
     }
 
     public void onEventAsync(RequestAlbumsDataEvent event) {

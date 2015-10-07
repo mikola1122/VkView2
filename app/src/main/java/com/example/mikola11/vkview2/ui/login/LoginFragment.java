@@ -80,7 +80,7 @@ public class LoginFragment extends Fragment implements LoginInterf {
                     Log.d(LOG, "token = " + accessToken);
                     Log.d(LOG, "ID = " + userId);
 
-                    EventBus.getDefault().post(new GoToFriendsListEvent());
+                    EventBus.getDefault().post(new GoToFriendsListEvent(true));
 
                     return true;
                 }

@@ -46,7 +46,7 @@ public class PhotoActivity extends AppCompatActivity {
     public static final String KEY_BITMAP = "Image Bitmap";
 
     private Toolbar toolbar;
-    private ShareActionProvider mShareActionProvider;
+    private MyShareActionProvider mShareActionProvider;
     Intent intent;
     private List<Uri> sharedPhotoUri = new ArrayList<Uri>();
     public boolean clickCounter = false;
@@ -142,7 +142,19 @@ public class PhotoActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                ViewGroup imageConteiner = (ViewGroup) viewPager.findViewWithTag(PhotoSamplePagerAdapter
+                        .TAG_IMAGE_VIEW + viewPager.getCurrentItem());
+                TouchImageView image = (TouchImageView) imageConteiner.findViewById(R.id.image);
+                PhotoUri photoUri = new PhotoUri();
+                Uri uri = photoUri.getLocalBitmapUri(image);
+                Log.d("NIKI", "PhotoActivity.onPageSelected uri = " + uri);
+                sharedPhotoUri.add(uri);
 
+                intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                setShareIntent(intent);
             }
 
             @Override
@@ -199,25 +211,13 @@ public class PhotoActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_photo_toolbar, menu);
         MenuItem itemShare = menu.findItem(R.id.share);
 
-        mShareActionProvider = new ShareActionProvider(PhotoActivity.this);
+        mShareActionProvider = new MyShareActionProvider(PhotoActivity.this);
         MenuItemCompat.setActionProvider(itemShare, mShareActionProvider);
 
         itemShare.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                ViewGroup imageConteiner = (ViewGroup) viewPager.findViewWithTag(PhotoSamplePagerAdapter
-                        .TAG_IMAGE_VIEW + viewPager.getCurrentItem());
-                TouchImageView image = (TouchImageView) imageConteiner.findViewById(R.id.image);
-                PhotoUri photoUri = new PhotoUri();
-                Uri uri = photoUri.getLocalBitmapUri(image);
-                Log.d("NIKI", "PhotoActivity.onPageSelected uri = " + uri);
-                sharedPhotoUri.add(uri);
 
-                intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND);
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_STREAM, uri);
-                setShareIntent(intent);
                 return true;
             }
         });
@@ -231,7 +231,6 @@ public class PhotoActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-//            case R.id.share:
 
         }
         return super.onOptionsItemSelected(item);
@@ -271,17 +270,17 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void onEvent(SendBitmapPhotoToShareEvent event) {
-//        if (event.massage == null) {
-//            Log.e("NIKI", "bitmap photo is empty");
-//        } else {
-//            sharedPhotoUri.add(event.massage);
-//
-//            intent = new Intent();
-//            intent.setAction(Intent.ACTION_SEND);
-//            intent.setType("image/*");
-//            intent.putExtra(Intent.EXTRA_STREAM, event.massage);
-//            setShareIntent(intent);
-//        }
+        if (event.massage == null) {
+            Log.e("NIKI", "bitmap photo is empty");
+        } else {
+            sharedPhotoUri.add(event.massage);
+
+            intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_STREAM, event.massage);
+            setShareIntent(intent);
+        }
         clickCounter = !clickCounter;
         if (clickCounter) {
             getSupportActionBar().show();
